@@ -2,9 +2,22 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
+func home(w http.ResponseWriter, r *http.Request) {
+	renderTemplate(w, "home.html")
+}
+
+func renderTemplate(w http.ResponseWriter, html string) {
+	parserTemplate, _ := template.ParseFiles("./templates" + html)
+	err := parserTemplate.Execute(w, nil)
+	if err != nil {
+		fmt.Println("error parsing template:", err)
+		return
+	}
+}
 func main() {
 	// The "HandleFunc" method accepts a path and a function as arguments
 	// (Yes, we can pass functions as arguments, and even treat them like variables in Go)
