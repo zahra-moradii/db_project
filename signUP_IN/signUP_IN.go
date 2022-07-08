@@ -19,7 +19,8 @@ func getDataBase() *sql.DB {
 }
 func userExist(username string) bool {
 	db := getDataBase()
-	//todo // does this username(or email) exist?
+	//todo
+	//todo does this username(or email) exist?
 	result, err := db.Query("SELECT * FROM")
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
