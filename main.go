@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	//	sign "db_project /project/signUP_IN"
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
@@ -76,15 +77,28 @@ func getDatabase() *sql.DB {
 	return db
 }
 func main() {
+	cfg := mysql.Config{
+		User:                 "root",
+		Passwd:               "ayda",
+		Net:                  "tcp",
+		Addr:                 "127.0.0.1:3306",
+		DBName:               "mySql",
+		AllowNativePasswords: true,
+	}
 
-	//	var b bool
-	//	_, b = userExist("abhishekbs@gmail.com")
-	//	if b {
-	//		fmt.Println("yes")
-	//	}
-	//router := gin.Default()
-	//router.GET("/users", getUsers)
+	db, err := sql.Open("mysql", cfg.FormatDSN())
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	//router.Run("localhost:8080")
+	if err != nil {
+		log.Print(err.Error())
+	}
+	defer db.Close()
 
+	//err = sign.signUp(db)
+	if err != nil {
+		panic(err)
+	}
+	println("yes")
 }

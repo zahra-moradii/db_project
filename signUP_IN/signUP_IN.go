@@ -4,30 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/go-sql-driver/mysql"
-	"log"
 )
 
-func userExist(Email string) (int, bool) {
-	cfg := mysql.Config{
-		User:                 "root",
-		Passwd:               "ayda",
-		Net:                  "tcp",
-		Addr:                 "127.0.0.1:3306",
-		DBName:               "mySql",
-		AllowNativePasswords: true,
-	}
-
-	db, err := sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if err != nil {
-		log.Print(err.Error())
-	}
-	defer db.Close()
-
+func userExist(Email string, db *sql.DB) (int, bool) {
 	var id int
 
 	result, err := db.Query("SELECT user_id FROM user_info WHERE email=?", Email)
@@ -44,62 +23,58 @@ func userExist(Email string) (int, bool) {
 	}
 	return id, true
 }
-func signUp() error {
+func signUp(db *sql.DB) error {
 	var Email string
-	//var Name string
+	var Password string
 
+	fmt.Println("email:")
 	fmt.Scanln(&Email)
-	//todo
-	//	fmt.Scanln(&password)
+	fmt.Println("password")
+	fmt.Scanln(&Password)
 
-	cfg := mysql.Config{
-		User:                 "root",
-		Passwd:               "ayda",
-		Net:                  "tcp",
-		Addr:                 "127.0.0.1:3306",
-		DBName:               "mySql",
-		AllowNativePasswords: true,
-	}
-
-	db, err := sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if err != nil {
-		log.Print(err.Error())
-	}
-	defer db.Close()
-
-	_, err = db.Query("SELECT user_id FROM user_info WHERE email=?", Email)
+	_, err := db.Query("SELECT user_id FROM user_info WHERE email=?", Email)
 	if err == nil {
 		fmt.Printf("User %s already exists! please signin \n", Email)
 		return errors.New("user already exists")
 	}
 
-	//todo //add username and get email and ...
-	//_, err := db.Query("INSERT INTO `admin_info` (`admin_id`, `admin_name`, `admin_email`, `admin_password`)" +
-	//	" VALUES   (1, 'admin', 'admin@gmail.com', '25f9e794323b453885f5181f1b624d0b');\n")
+	//add new user
+	sqlStatement := `
+	 INSERT INTO user_info
+	 SET email = $1, password = $2 ,first_name =$3
+	,last_name=$4,mobile=$5,address1=$6,address2=$7	;`
+
+	_, err = db.Exec(sqlStatement, Email, Password, " ", " ", " ", " ", " ")
+
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 	return nil
 
 }
-func signIn() (int, error) {
-	var email string
-	//todo also get password and then check in database
-	fmt.Scanln(&email)
+func signIn(db *sql.DB) (int, error) {
+	var Email string
+	var Password string
+	// get email, password and then check in database
+
+	fmt.Println("email:")
+	fmt.Scanln(&Email)
+	fmt.Println("password")
+	fmt.Scanln(&Password)
+
 	var id int
-	//var exist bool
-	//id, exist = userExist(email)
-	//if exist {
-	//todo // go to next page
+	var exist bool
+	id, exist = userExist(Email, db)
+	if exist {
+		//check password
+		_, err := db.Query("SELECT user_id FROM user_info WHERE password=?", Password)
+		if err == nil {
+			fmt.Printf("password is incorrect!\ntry again.")
+		}
+		return id, nil
+	}
 
-	//return id, nil
-	//	}
-
-	fmt.Printf("User %s does not exist! please signUp \n", email)
-	return id, errors.New("user does not exist")
+	fmt.Printf("User %s does not exist! please signUp \n", Email)
+	return id, errors.New("please signup")
 
 }
