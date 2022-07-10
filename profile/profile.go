@@ -8,6 +8,9 @@ import (
 	//"log"
 )
 
+//todo log out
+
+//todo is this an admin or not   profiles are different
 func deleteAccount(id int, db *sql.DB) {
 	//todo
 	println("todo")

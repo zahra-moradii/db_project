@@ -96,7 +96,7 @@ type User_info_backup struct {
 	Address1   string `json:"address1"`
 	Address2   string `json:"address2"`
 }
-type Products struct {
+type Product struct {
 	Product_id       int    `json:"product_id"`
 	Product_cat      int    `json:"product_cat"`
 	Product_brand    int    `json:"product_brand"`
@@ -104,12 +104,6 @@ type Products struct {
 	Product_price    int    `json:"product_price"`
 	Product_desc     string `json:"product_desc"`
 	Product_image    string `json:"product_image"`
-	Product_keywords int    `json:"product_keywords"`
-}
-type Product struct {
-	ID       int
-	Name     string
-	Category string
-	Quantity int
-	Price    float64
+	Product_keywords string `json:"product_keywords"`
+	Product_count    int    `jason:"product_count"`
 }

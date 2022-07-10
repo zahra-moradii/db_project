@@ -2,6 +2,8 @@ package main
 
 import (
 	"database/sql"
+	"db_p/pickbuy"
+
 	//"db_p/signUP_IN"
 	///"fmt"
 
@@ -99,6 +101,7 @@ func main() {
 		log.Print(err.Error())
 	}
 	defer db.Close()
+	pickbuy.Pick(db)
 
 	//	id, err := signUP_IN.SignIn(db)
 	//err = SignUp(db)
