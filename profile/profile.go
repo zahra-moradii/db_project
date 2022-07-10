@@ -8,6 +8,10 @@ import (
 	//"log"
 )
 
+func deleteAccount(id int, db *sql.DB) {
+	//todo
+	println("todo")
+}
 func modify_email(id int, Email string, db *sql.DB) {
 	sqlStatement := `
 		UPDATE user_info

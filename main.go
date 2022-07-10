@@ -2,7 +2,11 @@ package main
 
 import (
 	"database/sql"
-	//	sign "db_project /project/signUP_IN"
+	"db_p/signUP_IN"
+	"fmt"
+
+	//	"github.com/aydaZaman/db_project/signUP_IN"
+	//"db_p/signUP_IN"
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
@@ -15,8 +19,6 @@ import (
 	//signInUp "project/db_project/signUP_IN"
 	//	structs "project/db_project/structs"
 )
-
-//var db *sql.DB
 
 /*
 func Users() []*structs.User {
@@ -76,6 +78,7 @@ func getDatabase() *sql.DB {
 	defer db.Close()
 	return db
 }
+
 func main() {
 	cfg := mysql.Config{
 		User:                 "root",
@@ -96,9 +99,11 @@ func main() {
 	}
 	defer db.Close()
 
-	//err = sign.signUp(db)
+	id, err := signUP_IN.SignIn(db)
+	//err = SignUp(db)
 	if err != nil {
 		panic(err)
 	}
 	println("yes")
+	fmt.Printf("%d", id)
 }

@@ -1,3 +1,9 @@
+CREATE TABLE `setup_id` (
+        `id` int(10) NOT NULL
+
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `setup_id`(id)VALUE (30);
 
 CREATE TABLE `admin_info` (
                               `admin_id` int(10) NOT NULL,
@@ -333,6 +339,7 @@ INSERT INTO `user_info` (`user_id`, `first_name`, `last_name`, `email`, `passwor
                                                                                                                           (24, 'newuser', 'user', 'newuser@gmail.com', 'puneeth@123', '9535688928', 'Bangalore', 'Kumbalagodu'),
                                                                                                                           (25, 'otheruser', 'user', 'otheruser@gmail.com', 'puneeth@123', '9535688928', 'Bangalore', 'Kumbalagodu');
 
+ALTER TABLE user_info AUTO_INCREMENT=30;
 --
 -- Triggers `user_info`
 --
