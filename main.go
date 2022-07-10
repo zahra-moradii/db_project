@@ -2,8 +2,8 @@ package main
 
 import (
 	"database/sql"
-	"db_p/signUP_IN"
-	"fmt"
+	//"db_p/signUP_IN"
+	///"fmt"
 
 	//	"github.com/aydaZaman/db_project/signUP_IN"
 	//"db_p/signUP_IN"
@@ -55,7 +55,7 @@ func Users() []*structs.User {
 func getUsers(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, Users())
 }
-*/
+
 
 func getDatabase() *sql.DB {
 	cfg := mysql.Config{
@@ -78,6 +78,7 @@ func getDatabase() *sql.DB {
 	defer db.Close()
 	return db
 }
+*/
 
 func main() {
 	cfg := mysql.Config{
@@ -99,11 +100,11 @@ func main() {
 	}
 	defer db.Close()
 
-	id, err := signUP_IN.SignIn(db)
+	//	id, err := signUP_IN.SignIn(db)
 	//err = SignUp(db)
-	if err != nil {
-		panic(err)
-	}
-	println("yes")
-	fmt.Printf("%d", id)
+	//	if err != nil {
+	//		panic(err)
+	//}
+	//	println("yes")
+	//	fmt.Printf("%d", id)
 }
