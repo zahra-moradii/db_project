@@ -86,6 +86,7 @@ func SignIn(db *sql.DB) (int, error) {
 			fmt.Printf("password is incorrect!\ntry again.")
 			return -1, nil
 		}
+		fmt.Printf("welcome %s", Email)
 		return id, nil
 	}
 

@@ -81,6 +81,9 @@ func showAndChooseProduct(products []structs.Product) structs.Product {
 	return dictProducts[j]
 
 }
+func informProducts(db *sql.DB, id int) {
+
+}
 func selectProduct(product *structs.Product, chosenProducts *[]Pair, sumPrices *int) {
 	//check if the product is available ?
 	var amount int
@@ -92,6 +95,7 @@ func selectProduct(product *structs.Product, chosenProducts *[]Pair, sumPrices *
 		*chosenProducts = append(*chosenProducts, Pair{*product, amount})
 	} else {
 		//todo inform the costumer when it became available
+
 		println("this product is unavailable for now.\n")
 	}
 
@@ -113,6 +117,35 @@ type Pair struct {
 	amount  int
 }
 
+func recommendProducts(db *sql.DB, product structs.Product) {
+	result, err := db.Query(`SELECT * FROM products WHERE product_cat=? and product_title!=?`,
+		product.Product_cat, product.Product_title)
+	if err != nil {
+		panic(err)
+	}
+
+	//var products []structs.Product
+	println("recommended products:")
+	println("product title\t\tamount\t\tbrand\n")
+
+	i := 0
+	for result.Next() {
+		if i >= 4 {
+			break
+		}
+		var p structs.Product
+
+		err = result.Scan(&p.Product_id, &p.Product_cat, &p.Product_brand, &p.Product_title,
+			&p.Product_price, &p.Product_desc, &p.Product_image, &p.Product_keywords, &p.Product_count)
+
+		if err == nil {
+			fmt.Printf("%d ) %s\t %d \t\t%d\n", i+1, p.Product_title, p.Product_price, p.Product_brand)
+		}
+
+		i += 1
+	}
+
+}
 func Pick(db *sql.DB) ([]Pair, int) {
 	//show categories
 	var sumPrices = 0
@@ -128,11 +161,13 @@ func Pick(db *sql.DB) ([]Pair, int) {
 		var ans int
 		fmt.Scanf("%d", &ans)
 		if ans == 1 {
+			fmt.Printf("product %s selected\n", product.Product_title)
 			//show all info about it
 			//todo
 			//			getProductss()
 
 			selectProduct(&product, &chosenProducts, &sumPrices)
+			recommendProducts(db, product)
 		}
 		println("to exit enter EXIT.") //yes of no
 		fmt.Scanf("%s", &exit)
@@ -170,15 +205,14 @@ func chooseAddress(db *sql.DB, id int) string {
 	//choose address
 	add := -1
 	if address[1] != "X" {
-		fmt.Printf("%d)address1:%s", 1, address[1])
+		fmt.Printf("%d)address1:%s\n", 1, address[1])
 		if address[2] != "X" {
-			fmt.Printf("%d)address2:%s", 2, address[2])
+			fmt.Printf("%d)address2:%s\n", 2, address[2])
 			fmt.Scanf("%d", &add)
 		}
 
 	} else {
 		println("please enter your address:")
-		//todo modify address
 		fmt.Scanf("%s", &address[0])
 		profile.Modify_address1(id, address[0], db)
 
