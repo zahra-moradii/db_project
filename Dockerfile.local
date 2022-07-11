@@ -1,0 +1,15 @@
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+
+COPY ./.bin/app .
+COPY Api/ ./Api/
+COPY database/ ./database/
+COPY pickbuy/ ./pickbuy/
+COPY profile/ ./profile/
+COPY signUP_IN/ ./signUP_IN/
+COPY struct/ ./struct/
+
+
+CMD ["./app"
