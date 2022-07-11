@@ -144,7 +144,7 @@ CREATE TABLE `logs` (
 --
 
 CREATE TABLE `orders` (
-                          `order_id` int(11) NOT NULL,
+                          `order_id` int(11) NOT NULL ,
                           `user_id` int(11) NOT NULL,
                           `product_id` int(11) NOT NULL,
                           `total_amt` int(15) DEFAULT NULL,

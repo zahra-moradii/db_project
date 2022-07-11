@@ -2,8 +2,10 @@ package pickbuy
 
 import (
 	"database/sql"
+	"db_p/profile"
 	"db_p/structs"
 	"fmt"
+	"time"
 )
 
 func GetAllCategories(db *sql.DB) []structs.Categories {
@@ -84,13 +86,13 @@ func selectProduct(product *structs.Product, chosenProducts *[]Pair, sumPrices *
 	fmt.Scanf("%d", &amount)
 
 	if product.Product_count*amount >= 0 {
-		*sumPrices += product.Product_price
+		*sumPrices += product.Product_price * amount
 		*chosenProducts = append(*chosenProducts, Pair{*product, amount})
 	} else {
-		//todo
-		println("this product is unavailable for now.")
+		//todo inform the costumer when it became available
+		println("this product is unavailable for now.\n")
 	}
-	//	return chosenProducts, sumPrices
+
 }
 func showOrders(selectedProducts []Pair, totalAmount int) {
 	println("product title\t\tprice\t\tamount\n")
@@ -100,7 +102,7 @@ func showOrders(selectedProducts []Pair, totalAmount int) {
 		fmt.Printf("%d ) %s %d \t\t%d\n", i+1, p.product.Product_title, p.product.Product_price, p.amount)
 		i += 1
 	}
-	fmt.Printf("total sum :\t\t %d", totalAmount)
+	fmt.Printf("total sum :\t\t %d\n", totalAmount)
 
 }
 
@@ -150,6 +152,37 @@ func Order(db *sql.DB, id int) {
 		i += 1
 	}
 }
+func chooseAddress(db *sql.DB, id int) string {
+	var address [3]string
+	result, err := db.Query(`SELECT address1,address2 FROM user_info WHERE user_id=?`, id)
+	for result.Next() {
+		err = result.Scan(&address[1], &address[2])
+		if err != nil {
+			panic(err)
+
+		}
+	}
+	//choose address
+	add := -1
+	if address[1] != "X" {
+		fmt.Printf("%d)address1:%s", 1, address[1])
+		if address[2] != "X" {
+			fmt.Printf("%d)address2:%s", 2, address[2])
+			fmt.Scanf("%d", &add)
+		}
+
+	} else {
+		println("please enter your address:")
+		//todo modify address
+		fmt.Scanf("%s", &address[0])
+		profile.Modify_address1(id, address[0], db)
+
+	}
+	if add != -1 {
+		address[0] = address[add]
+	}
+	return address[0]
+}
 
 func GetProductById(db *sql.DB, product_id int, p *structs.Product) {
 	rows, err := db.Query("SELECT * FROM products WHERE product_id=?", product_id)
@@ -168,11 +201,32 @@ func GetProductById(db *sql.DB, product_id int, p *structs.Product) {
 	}
 
 }
+func updateLog(db *sql.DB, id int, orderID int, totoalAmount int, cardNum int, cvv int, address string) {
+
+	//make a log
+	date := time.Now().Format("2006.01.02 15:04:05")
+	_, err := db.Query(`INSERT INTO logs  SET order_id=?,user_id=?,action=?,address=?,total_amt=?,card_number=?,cvv=?,date=?`,
+		orderID, id, "COMPLETED", address, totoalAmount, cardNum, cvv, date)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	//update status
+
+	_, err = db.Query(`UPDATE orders SET   status= ?	WHERE  order_id=? and user_id=?`,
+		"COMPLETED", orderID, id)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+}
 func Buy(db *sql.DB, id int) {
 	var count int
 	var orderTotalCost int
 	var orderID int
 	var product_id int
+	var arrOrderIDs []int
 	sum := 0
 	var products []Pair
 	var product structs.Product
@@ -188,18 +242,36 @@ func Buy(db *sql.DB, id int) {
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
-
+		arrOrderIDs = append(arrOrderIDs, orderID)
 		sum += orderTotalCost
 		GetProductById(db, product_id, &product)
 		products = append(products, Pair{product, count})
 	}
 	//show products
+	println("all your orders:")
 	showOrders(products, sum)
 	var ans int
 	println("\nAre you sure you want to buy?\n0)NO\n1)YES\n")
 	fmt.Scanf("%d", &ans)
 	if ans == 1 {
 		//log
+		var cardNum int
+		var cvv int
+
+		println("enter your card number:")
+		fmt.Scanf("%d", &cardNum)
+
+		println("enter your cvv number:")
+		fmt.Scanf("%d", &cvv)
+
+		address := chooseAddress(db, id)
+
+		i := 0
+		for i < len(arrOrderIDs) {
+			//i is order id
+			updateLog(db, id, arrOrderIDs[i], sum, cardNum, cvv, address)
+			i += 1
+		}
 	} else {
 		return
 	}

@@ -70,7 +70,7 @@ func modify_mobile(id int, phnoeNum string, db *sql.DB) {
 		errors.New("could not change email")
 	}
 }
-func modify_address1(id int, add1 string, db *sql.DB) {
+func Modify_address1(id int, add1 string, db *sql.DB) {
 	sqlStatement := `
 		UPDATE user_info
 		SET address1 = $2
@@ -81,7 +81,7 @@ func modify_address1(id int, add1 string, db *sql.DB) {
 		errors.New("could not change address1")
 	}
 }
-func modify_address2(id int, add2 string, db *sql.DB) {
+func Modify_address2(id int, add2 string, db *sql.DB) {
 	sqlStatement := `
 		UPDATE user_info
 		SET address2 = $2

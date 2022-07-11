@@ -106,7 +106,7 @@ func main() {
 	signUP_IN.SignUp(db)
 	id, _ := signUP_IN.SignIn(db)
 	pickbuy.Order(db, id)
-
+	pickbuy.Buy(db, id)
 	//	id, err := signUP_IN.SignIn(db)
 	//err = SignUp(db)
 	//	if err != nil {
