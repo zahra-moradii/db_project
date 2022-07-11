@@ -2,8 +2,8 @@ package main
 
 import (
 	"database/sql"
-	"db_p/pickbuy"
-	"db_p/signUP_IN"
+	API "db_p/Api"
+	"github.com/gin-gonic/gin"
 
 	//"db_p/signUP_IN"
 	///"fmt"
@@ -103,15 +103,10 @@ func main() {
 	}
 	defer db.Close()
 
-	signUP_IN.SignUp(db)
-	id, _ := signUP_IN.SignIn(db)
-	pickbuy.Order(db, id)
-	pickbuy.Buy(db, id)
-	//	id, err := signUP_IN.SignIn(db)
-	//err = SignUp(db)
-	//	if err != nil {
-	//		panic(err)
-	//}
-	//	println("yes")
-	//	fmt.Printf("%d", id)
+	router := gin.Default()
+	router.POST("/users", API.CreateUser)
+
+	//id, _ := signUP_IN.SignIn(db)
+	//	pickbuy.Order(db, id)
+	//	pickbuy.Buy(db, id)
 }

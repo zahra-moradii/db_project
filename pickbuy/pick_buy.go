@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"db_p/profile"
 	"db_p/structs"
+	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -126,7 +128,10 @@ func Pick(db *sql.DB) ([]Pair, int) {
 		var ans int
 		fmt.Scanf("%d", &ans)
 		if ans == 1 {
-			//chosenProducts,sumPrices=
+			//show all info about it
+			//todo
+			//			getProductss()
+
 			selectProduct(&product, &chosenProducts, &sumPrices)
 		}
 		println("to exit enter EXIT.") //yes of no
@@ -138,8 +143,8 @@ func Pick(db *sql.DB) ([]Pair, int) {
 	return chosenProducts, sumPrices
 }
 func Order(db *sql.DB, id int) {
-	products, sumAmount := Pick(db)
-	showOrders(products, sumAmount)
+	products, _ := Pick(db)
+	//showOrders(products, sumAmount)
 	i := 0
 	for i < len(products) {
 		p := products[i]
@@ -261,7 +266,7 @@ func Buy(db *sql.DB, id int) {
 		println("enter your card number:")
 		fmt.Scanf("%d", &cardNum)
 
-		println("enter your cvv number:")
+		println("enter your cvv:")
 		fmt.Scanf("%d", &cvv)
 
 		address := chooseAddress(db, id)
@@ -272,8 +277,27 @@ func Buy(db *sql.DB, id int) {
 			updateLog(db, id, arrOrderIDs[i], sum, cardNum, cvv, address)
 			i += 1
 		}
-	} else {
-		return
 	}
+	GetLog(db, id)
+}
+func GetLog(db *sql.DB, id int) {
+	var log structs.Logs
+	result, err := db.Query(`SELECT * FROM logs WHERE user_id=?`, id)
+	if err != nil {
+		panic(err.Error())
+	}
+	for result.Next() {
+		err = result.Scan(&log.Id, &log.Order_id, &log.User_id, &log.Action, &log.Address,
+			&log.Total_amt, &log.Cardnumber, &log.Cvv, &log.Date)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	b, err := json.Marshal(log)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	os.Stdout.Write(b)
 
 }

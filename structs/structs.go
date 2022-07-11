@@ -36,10 +36,15 @@ type Email_info struct {
 }
 
 type Logs struct {
-	Id      int    `json:"id"`
-	User_id int    `json:"user_id"`
-	Action  string `json:"action"`
-	Date    string `json:"date"`
+	Id         int    `json:"id_log"`
+	Order_id   int    `json:"order_id"`
+	User_id    int    `json:"user_id"`
+	Action     string `json:"action"`
+	Date       string `json:"date"`
+	Total_amt  int    `json:"total_amt"`
+	Cvv        int    `json:"cvv"`
+	Cardnumber string `json:"cardnumber"`
+	Address    string `json:"address"`
 }
 
 type Orders struct {
