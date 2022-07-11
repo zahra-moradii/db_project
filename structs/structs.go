@@ -107,3 +107,93 @@ type Product struct {
 	Product_keywords string `json:"product_keywords"`
 	Product_count    int    `jason:"product_count"`
 }
+
+/*
+
+
+
+
+
+
+
+CREATE TABLE `logs` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`user_id` varchar(50) NOT NULL,
+`address` varchar(255) NOT NULL,
+`total_amt` int(15) DEFAULT NULL,
+`card_number` varchar(255)NOT NULL ,
+`cvv` int(5) NOT NULL,
+`date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE logs AUTO_INCREMENT=100;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+`order_id` int(11) NOT NULL AUTO_INCREMENT,
+`user_id` int(11) NOT NULL,
+`product_id` int(11) NOT NULL,
+`total_amt` int(15) DEFAULT NULL,
+`count` int(11) NOT NULL,
+`status` varchar(255)NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE orders AUTO_INCREMENT=100;
+--
+-- Dumping data for table `orders`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders_info`
+--
+
+CREATE TABLE `orders_info` (
+`order_id` int(10) NOT NULL ,
+`user_id` int(11) NOT NULL,
+`prod_count` int(15) DEFAULT NULL,
+`total_amt` int(15) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders_info`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_products`
+--
+
+CREATE TABLE `order_products` (
+`order_pro_id` int(10) NOT NULL ,
+`order_id` int(11) NOT NULL ,
+`product_id` int(11) NOT NULL,
+`qty` int(15) DEFAULT NULL,
+`amt` int(15) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_products`
+--
+
+INSERT INTO `order_products` (`order_pro_id`, `order_id`, `product_id`, `qty`, `amt`) VALUES
+(73, 1, 1, 1, 5000),
+(74, 1, 4, 2, 64000),
+(75, 1, 8, 1, 40000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+
+
+
+
+
+*/

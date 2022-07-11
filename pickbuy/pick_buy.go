@@ -77,7 +77,7 @@ func showAndChooseProduct(products []structs.Product) structs.Product {
 	return dictProducts[j]
 
 }
-func selectProduct(product *structs.Product, chosenProducts *[]Pair, sumPrices *int) { //([]structs.Product ,int){
+func selectProduct(product *structs.Product, chosenProducts *[]Pair, sumPrices *int) {
 	//check if the product is available ?
 	var amount int
 	println("how many?")
@@ -85,13 +85,7 @@ func selectProduct(product *structs.Product, chosenProducts *[]Pair, sumPrices *
 
 	if product.Product_count*amount >= 0 {
 		*sumPrices += product.Product_price
-
-		i := 0
-		for i < amount {
-			*chosenProducts = append(*chosenProducts, Pair{*product, amount})
-			i += 1
-		}
-
+		*chosenProducts = append(*chosenProducts, Pair{*product, amount})
 	} else {
 		//todo
 		println("this product is unavailable for now.")
@@ -139,12 +133,75 @@ func Pick(db *sql.DB) ([]Pair, int) {
 			break
 		}
 	}
-	showOrders(chosenProducts, sumPrices)
 	return chosenProducts, sumPrices
 }
-
-func Buy(db *sql.DB, id int) {
+func Order(db *sql.DB, id int) {
 	products, sumAmount := Pick(db)
 	showOrders(products, sumAmount)
+	i := 0
+	for i < len(products) {
+		p := products[i]
+		_, err := db.Query(`INSERT INTO orders  SET user_id=?,product_id=?,total_amt=?,count=?,status=?  `,
+			id, p.product.Product_id, p.amount*p.product.Product_price, p.amount, "SELECTED")
+
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		i += 1
+	}
+}
+
+func GetProductById(db *sql.DB, product_id int, p *structs.Product) {
+	rows, err := db.Query("SELECT * FROM products WHERE product_id=?", product_id)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+
+		err = rows.Scan(&p.Product_id, &p.Product_cat, &p.Product_brand, &p.Product_title,
+			&p.Product_price, &p.Product_desc, &p.Product_image, &p.Product_keywords, &p.Product_count)
+
+		if err != nil {
+			panic(err)
+		}
+	}
+
+}
+func Buy(db *sql.DB, id int) {
+	var count int
+	var orderTotalCost int
+	var orderID int
+	var product_id int
+	sum := 0
+	var products []Pair
+	var product structs.Product
+	//find selected products
+	result, err := db.Query(`SELECT order_id,product_id,count,total_amt FROM orders WHERE status=? and user_id=? `, "SELECTED", id)
+
+	if err != nil {
+		panic(err.Error()) // proper error handling instead of panic in your app
+	}
+
+	for result.Next() {
+		err = result.Scan(&orderID, &product_id, &count, &orderTotalCost)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+
+		sum += orderTotalCost
+		GetProductById(db, product_id, &product)
+		products = append(products, Pair{product, count})
+	}
+	//show products
+	showOrders(products, sum)
+	var ans int
+	println("\nAre you sure you want to buy?\n0)NO\n1)YES\n")
+	fmt.Scanf("%d", &ans)
+	if ans == 1 {
+		//log
+	} else {
+		return
+	}
 
 }
