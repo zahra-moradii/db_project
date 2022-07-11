@@ -194,8 +194,8 @@ INSERT INTO `orders_info` (`order_id`, `user_id`, `f_name`, `email`, `address`, 
 --
 
 CREATE TABLE `order_products` (
-                                  `order_pro_id` int(10) NOT NULL AUTO_INCREMENT,
-                                  `order_id` int(11) NOT NULL,
+                                  `order_pro_id` int(10) NOT NULL ,
+                                  `order_id` int(11) NOT NULL AUTO_INCREMENT,
                                   `product_id` int(11) NOT NULL,
                                   `qty` int(15) DEFAULT NULL,
                                   `amt` int(15) DEFAULT NULL
