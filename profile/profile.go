@@ -2,7 +2,10 @@ package profile
 
 import (
 	"database/sql"
-	"db_p/pickbuy"
+	"db_p/structs"
+	"fmt"
+
+	//"db_p/pickbuy"
 	"errors"
 	//"fmt"
 	//"github.com/go-sql-driver/mysql"
@@ -12,11 +15,41 @@ import (
 //todo log out
 
 //todo is this an admin or not   profiles are different
+
+//is the orders available or not yet
 func showNews(db *sql.DB, id int) {
-	pickbuy.InformProducts(db, id)
+	result, err := db.Query(`SELECT product_id,total_amt  FROM orders WHERE user_id=? and status=? `, id, "SELECTION FAILED")
+	if err != nil {
+		panic(err)
+	}
+	for result.Next() {
+		var pID int
+		var amount int
+		err = result.Scan(&pID, &amount)
+		if err != nil {
+			panic(err)
+		}
+		var p structs.Product
+		result2, err := db.Query(`SELECT product_id  FROM orders WHERE user_id=? and status=? `, id)
+		if err != nil {
+			panic(err)
+		}
+		err = result2.Scan(&p.Product_id, &p.Product_cat, &p.Product_brand, &p.Product_title,
+			&p.Product_price, &p.Product_desc, &p.Product_image, &p.Product_keywords, &p.Product_count)
+		if err != nil {
+			panic(err)
+		}
+
+		if p.Product_count >= amount {
+			fmt.Printf("product %s is available now\n", p.Product_title)
+		} else {
+			fmt.Printf("product %s is not available yet!\n", p.Product_title)
+		}
+	}
+	//or //use -> pickbuy.InformProducts(db, id)
 }
 func showLogs(db *sql.DB, id int) {
-	pickbuy.ShowLog(id, db)
+	//todo  use ->pickbuy.ShowLog(id, db)
 }
 func modify_email(id int, Email string, db *sql.DB) {
 	_, err := db.Query(`UPDATE user_info SET email = ? WHERE user_id = ?`, Email, id)

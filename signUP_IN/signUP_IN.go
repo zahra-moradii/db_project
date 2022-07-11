@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 func userExist(Email string, db *sql.DB) (int, bool) {
@@ -28,12 +29,13 @@ func userExist(Email string, db *sql.DB) (int, bool) {
 }
 func SignUp(db *sql.DB) error {
 	var Email string
-	var Password string
-
-	fmt.Println("email:")
+	fmt.Println("Enter email:")
 	fmt.Scanln(&Email)
-	fmt.Println("password")
-	fmt.Scanln(&Password)
+	fmt.Println("Enter password: ")
+	Password, err := terminal.ReadPassword(0)
+	if err != nil {
+		panic(err)
+	}
 
 	var id = -1
 
@@ -58,13 +60,15 @@ func SignUp(db *sql.DB) error {
 }
 func SignIn(db *sql.DB) (int, error) {
 	var Email string
-	var Password string
 	// get email, password and then check in database
 
-	fmt.Println("email:")
+	fmt.Println("Enter email:")
 	fmt.Scanln(&Email)
-	fmt.Println("password")
-	fmt.Scanln(&Password)
+	fmt.Println("Enter password: ")
+	password, err := terminal.ReadPassword(0)
+	if err != nil {
+		panic(err)
+	}
 
 	var id = -1
 	var id2 = -1
@@ -72,7 +76,7 @@ func SignIn(db *sql.DB) (int, error) {
 	id, exist = userExist(Email, db)
 	if exist == true {
 		//check password
-		result, err := db.Query("SELECT user_id FROM user_info WHERE password=?", Password)
+		result, err := db.Query("SELECT user_id FROM user_info WHERE password=?", password)
 		if err != nil {
 			panic(err)
 		}

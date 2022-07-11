@@ -4,23 +4,10 @@ import (
 	"database/sql"
 	"db_p/pickbuy"
 	"db_p/signUP_IN"
-
-	//"db_p/signUP_IN"
-	///"fmt"
-
-	//	"github.com/aydaZaman/db_project/signUP_IN"
-	//"db_p/signUP_IN"
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
-	//	"project/mySql"
-	//	"errors"
-	//"fmt"
-	//	"github.com/gin-gonic/gin"
 	"log"
-	//	"net/http"
-	//signInUp "project/db_project/signUP_IN"
-	//	structs "project/db_project/structs"
 )
 
 /*

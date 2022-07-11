@@ -82,21 +82,65 @@ func showAndChooseProduct(products []structs.Product) structs.Product {
 
 }
 func InformProducts(db *sql.DB, id int) {
+	result, err := db.Query(`SELECT product_id,total_amt  FROM orders WHERE user_id=? and status=? `, id, "SELECTION FAILED")
+	if err != nil {
+		panic(err)
+	}
+	for result.Next() {
+		var pID int
+		var amount int
+		err = result.Scan(&pID, &amount)
+		if err != nil {
+			panic(err)
+		}
+		var p structs.Product
+		result2, err := db.Query(`SELECT product_id  FROM orders WHERE user_id=? and status=? `, id, )
+		if err != nil {
+			panic(err)
+		}
+		err = result2.Scan(&p.Product_id, &p.Product_cat, &p.Product_brand, &p.Product_title,
+			&p.Product_price, &p.Product_desc, &p.Product_image, &p.Product_keywords, &p.Product_count)
+		if err != nil {
+			panic(err)
+		}
+
+		if p.Product_count >= amount {
+			fmt.Printf("product %s is available now\n", p.Product_title)
+		} else {
+			fmt.Printf("product %s is not available yet!\n", p.Product_title)
+		}
+	}
 
 }
-func selectProduct(product *structs.Product, chosenProducts *[]Pair, sumPrices *int) {
+func selectProduct(db *sql.DB, id int, product *structs.Product, chosenProducts *[]Pair, sumPrices *int) {
 	//check if the product is available ?
 	var amount int
 	println("how many?")
 	fmt.Scanf("%d", &amount)
 
-	if product.Product_count*amount >= 0 {
+	if product.Product_count >= amount {
 		*sumPrices += product.Product_price * amount
 		*chosenProducts = append(*chosenProducts, Pair{*product, amount})
-	} else {
-		//todo inform the costumer when it became available
 
-		println("this product is unavailable for now.\n")
+		//update product_ decrease count of product
+		_, err := db.Query(`UPDATE products SET product_count = ? WHERE product_id = ?`,
+			product.Product_count-amount, product.Product_id)
+
+		if err != nil {
+			panic(err)
+		}
+
+	} else {
+		fmt.Printf("product %s with count %d\n", product.Product_title, amount)
+		_, err := db.Query(`INSERT INTO orders  SET user_id=?,product_id=?,total_amt=?,count=?,status=?  `,
+			id, product.Product_id, amount*product.Product_price, amount, "SELECTION FAILED")
+		if err != nil {
+			panic(err)
+		}
+
+		//inform the costumer when it became available func :pickbuy.InformProducts(db, id)
+
+		println("this product is unavailable for now. check your profile for any news\n")
 	}
 
 }
@@ -146,7 +190,7 @@ func recommendProducts(db *sql.DB, product structs.Product) {
 	}
 
 }
-func Pick(db *sql.DB) ([]Pair, int) {
+func Pick(db *sql.DB, id int) ([]Pair, int) {
 	//show categories
 	var sumPrices = 0
 	var chosenProducts []Pair
@@ -166,7 +210,7 @@ func Pick(db *sql.DB) ([]Pair, int) {
 			//todo
 			//			getProductss()
 
-			selectProduct(&product, &chosenProducts, &sumPrices)
+			selectProduct(db, id, &product, &chosenProducts, &sumPrices)
 			recommendProducts(db, product)
 		}
 		println("to exit enter EXIT.") //yes of no
@@ -178,7 +222,7 @@ func Pick(db *sql.DB) ([]Pair, int) {
 	return chosenProducts, sumPrices
 }
 func Order(db *sql.DB, id int) {
-	products, _ := Pick(db)
+	products, _ := Pick(db, id)
 	//showOrders(products, sumAmount)
 	i := 0
 	for i < len(products) {
