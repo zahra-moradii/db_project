@@ -77,32 +77,48 @@ func showAndChooseProduct(products []structs.Product) structs.Product {
 	return dictProducts[j]
 
 }
-func selectProduct(product *structs.Product, chosenProducts *[]structs.Product, sumPrices *int) { //([]structs.Product ,int){
+func selectProduct(product *structs.Product, chosenProducts *[]Pair, sumPrices *int) { //([]structs.Product ,int){
 	//check if the product is available ?
+	var amount int
+	println("how many?")
+	fmt.Scanf("%d", &amount)
 
-	if product.Product_count >= 0 {
+	if product.Product_count*amount >= 0 {
 		*sumPrices += product.Product_price
-		*chosenProducts = append(*chosenProducts, *product)
+
+		i := 0
+		for i < amount {
+			*chosenProducts = append(*chosenProducts, Pair{*product, amount})
+			i += 1
+		}
+
 	} else {
+		//todo
 		println("this product is unavailable for now.")
 	}
 	//	return chosenProducts, sumPrices
 }
-func showOrders(selectedProducts []structs.Product, totalAmount int) {
-	println("product title           price   :\n")
+func showOrders(selectedProducts []Pair, totalAmount int) {
+	println("product title\t\tprice\t\tamount\n")
 	i := 0
 	for i < len(selectedProducts) {
 		p := selectedProducts[i]
-		fmt.Printf("%d ) %s %d\n", i+1, p.Product_title, p.Product_price)
+		fmt.Printf("%d ) %s %d \t\t%d\n", i+1, p.product.Product_title, p.product.Product_price, p.amount)
 		i += 1
 	}
-	fmt.Printf("total sum :\t\t\t %d", totalAmount)
+	fmt.Printf("total sum :\t\t %d", totalAmount)
 
 }
-func Pick(db *sql.DB) ([]structs.Product, int) {
+
+type Pair struct {
+	product structs.Product
+	amount  int
+}
+
+func Pick(db *sql.DB) ([]Pair, int) {
 	//show categories
 	var sumPrices = 0
-	var chosenProducts []structs.Product
+	var chosenProducts []Pair
 	allCategories := GetAllCategories(db)
 	category := showAndChooseCategory(allCategories)
 	fmt.Printf("%d", category.Cat_id)

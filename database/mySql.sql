@@ -1,12 +1,13 @@
 
 
 CREATE TABLE `admin_info` (
-                              `admin_id` int(10) NOT NULL,
+                              `admin_id` int(10) NOT NULL AUTO_INCREMENT,
                               `admin_name` varchar(100) NOT NULL,
                               `admin_email` varchar(300) NOT NULL,
                               `admin_password` varchar(300) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+ALTER TABLE admin_info AUTO_INCREMENT=100;
 --
 -- Dumping data for table `admin_info`
 --
@@ -21,13 +22,14 @@ INSERT INTO `admin_info` (`admin_id`, `admin_name`, `admin_email`, `admin_passwo
 --
 
 CREATE TABLE `brands` (
-                          `brand_id` int(100) NOT NULL,
+                          `brand_id` int(100) NOT NULL AUTO_INCREMENT,
                           `brand_title` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `brands`
 --
+ALTER TABLE brands AUTO_INCREMENT=100;
 
 INSERT INTO `brands` (`brand_id`, `brand_title`) VALUES
                                                      (1, 'HP'),
@@ -46,12 +48,12 @@ INSERT INTO `brands` (`brand_id`, `brand_title`) VALUES
 --
 
 CREATE TABLE `cart` (
-                        `id` int(10) NOT NULL,
+                        `id` int(10) NOT NULL AUTO_INCREMENT,
                         `p_id` int(10) NOT NULL,
                         `user_id` int(10) DEFAULT NULL,
                         `qty` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+ALTER TABLE cart AUTO_INCREMENT=100;
 --
 -- Dumping data for table `cart`
 --
@@ -82,10 +84,10 @@ INSERT INTO `cart` (`id`, `p_id`, `user_id`, `qty`) VALUES
 --
 
 CREATE TABLE `categories` (
-                              `cat_id` int(100) NOT NULL,
+                              `cat_id` int(100) NOT NULL AUTO_INCREMENT,
                               `cat_title` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+ALTER TABLE categories AUTO_INCREMENT=100;
 --
 -- Dumping data for table `categories`
 --
@@ -106,10 +108,10 @@ INSERT INTO `categories` (`cat_id`, `cat_title`) VALUES
 --
 
 CREATE TABLE `email_info` (
-                              `email_id` int(100) NOT NULL,
+                              `email_id` int(100) NOT NULL AUTO_INCREMENT,
                               `email` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+ALTER TABLE email_info AUTO_INCREMENT=100;
 --
 -- Dumping data for table `email_info`
 --
@@ -126,12 +128,12 @@ INSERT INTO `email_info` (`email_id`, `email`) VALUES
 --
 
 CREATE TABLE `logs` (
-                        `id` int(11) NOT NULL,
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
                         `user_id` varchar(50) NOT NULL,
                         `action` varchar(50) NOT NULL,
                         `date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+ALTER TABLE logs AUTO_INCREMENT=100;
 -- --------------------------------------------------------
 
 --
@@ -139,14 +141,14 @@ CREATE TABLE `logs` (
 --
 
 CREATE TABLE `orders` (
-                          `order_id` int(11) NOT NULL,
+                          `order_id` int(11) NOT NULL AUTO_INCREMENT,
                           `user_id` int(11) NOT NULL,
                           `product_id` int(11) NOT NULL,
                           `qty` int(11) NOT NULL,
                           `trx_id` varchar(255) NOT NULL,
                           `p_status` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+ALTER TABLE orders AUTO_INCREMENT=100;
 --
 -- Dumping data for table `orders`
 --
@@ -162,14 +164,14 @@ INSERT INTO `orders` (`order_id`, `user_id`, `product_id`, `qty`, `trx_id`, `p_s
 --
 
 CREATE TABLE `orders_info` (
-                               `order_id` int(10) NOT NULL,
+                               `order_id` int(10) NOT NULL ,
                                `user_id` int(11) NOT NULL,
                                `f_name` varchar(255) NOT NULL,
                                `email` varchar(255) NOT NULL,
                                `address` varchar(255) NOT NULL,
-                               `city` varchar(255) NOT NULL,
-                               `state` varchar(255) NOT NULL,
-                               `zip` int(10) NOT NULL,
+#                               `city` varchar(255) NOT NULL,
+  #                             `state` varchar(255) NOT NULL,
+ #                              `zip` int(10) NOT NULL,
                                `cardname` varchar(255) NOT NULL,
                                `cardnumber` varchar(20) NOT NULL,
                                `expdate` varchar(255) NOT NULL,
@@ -192,7 +194,7 @@ INSERT INTO `orders_info` (`order_id`, `user_id`, `f_name`, `email`, `address`, 
 --
 
 CREATE TABLE `order_products` (
-                                  `order_pro_id` int(10) NOT NULL,
+                                  `order_pro_id` int(10) NOT NULL AUTO_INCREMENT,
                                   `order_id` int(11) NOT NULL,
                                   `product_id` int(11) NOT NULL,
                                   `qty` int(15) DEFAULT NULL,
@@ -215,7 +217,7 @@ INSERT INTO `order_products` (`order_pro_id`, `order_id`, `product_id`, `qty`, `
 --
 
 CREATE TABLE `products` (
-                            `product_id` int(100) NOT NULL,
+                            `product_id` int(100) NOT NULL AUTO_INCREMENT,
                             `product_cat` int(100) NOT NULL,
                             `product_brand` int(100) NOT NULL,
                             `product_title` varchar(255) NOT NULL,
@@ -312,7 +314,7 @@ INSERT INTO `products` (`product_id`, `product_cat`, `product_brand`, `product_t
 --
 
 CREATE TABLE `user_info` (
-                             `user_id` int(10) NOT NULL,
+                             `user_id` int(10) NOT NULL AUTO_INCREMENT,
                              `first_name` varchar(100) NOT NULL,
                              `last_name` varchar(100) NOT NULL,
                              `email` varchar(300) NOT NULL,
