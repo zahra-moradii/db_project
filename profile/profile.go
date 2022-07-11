@@ -16,7 +16,7 @@ import (
 
 //todo is this an admin or not   profiles are different
 
-//is the orders available or not yet
+//are the orders available or not yet
 func showNews(db *sql.DB, id int) {
 	result, err := db.Query(`SELECT product_id,total_amt  FROM orders WHERE user_id=? and status=? `, id, "SELECTION FAILED")
 	if err != nil {

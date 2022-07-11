@@ -4,9 +4,7 @@ import (
 	"database/sql"
 	"db_p/profile"
 	"db_p/structs"
-	"encoding/json"
 	"fmt"
-	"os"
 	"time"
 )
 
@@ -94,7 +92,7 @@ func InformProducts(db *sql.DB, id int) {
 			panic(err)
 		}
 		var p structs.Product
-		result2, err := db.Query(`SELECT product_id  FROM orders WHERE user_id=? and status=? `, id, )
+		result2, err := db.Query(`SELECT product_id  FROM orders WHERE user_id=? and status=? `, id)
 		if err != nil {
 			panic(err)
 		}
@@ -356,29 +354,33 @@ func Buy(db *sql.DB, id int) {
 			i += 1
 		}
 	}
-	GetLog(db, id)
+	ShowLogs(id, db)
+	//	GetLogs(db, id)
 }
-func ShowLog(id int, db *sql.DB) {
-
-}
-func GetLog(db *sql.DB, id int) {
-	var log structs.Logs
+func GetLogs(db *sql.DB, id int) []structs.Logs {
+	var logs []structs.Logs
 	result, err := db.Query(`SELECT * FROM logs WHERE user_id=?`, id)
 	if err != nil {
 		panic(err.Error())
 	}
 	for result.Next() {
+		var log structs.Logs
 		err = result.Scan(&log.Id, &log.Order_id, &log.User_id, &log.Action, &log.Address,
 			&log.Total_amt, &log.Cardnumber, &log.Cvv, &log.Date)
 		if err != nil {
 			panic(err)
 		}
+		logs = append(logs, log)
 	}
-	//show log
-	b, err := json.Marshal(log)
-	if err != nil {
-		fmt.Println("error:", err)
+	return logs
+}
+func ShowLogs(id int, db *sql.DB) {
+	logs := GetLogs(db, id)
+	i := 0
+	for i < len(logs) {
+		log := logs[i]
+		fmt.Printf(" date:%s\naddress:%s\ncard%s\ntotal cost:%d\n",
+			log.Date, log.Address, log.Cardnumber, log.Total_amt)
+		i += 1
 	}
-	os.Stdout.Write(b)
-
 }
