@@ -2,6 +2,7 @@ package profile
 
 import (
 	"database/sql"
+	"db_p/pickbuy"
 	"errors"
 	//"fmt"
 	//"github.com/go-sql-driver/mysql"
@@ -11,7 +12,12 @@ import (
 //todo log out
 
 //todo is this an admin or not   profiles are different
-
+func showNews(db *sql.DB, id int) {
+	pickbuy.InformProducts(db, id)
+}
+func showLogs(db *sql.DB, id int) {
+	pickbuy.ShowLog(id, db)
+}
 func modify_email(id int, Email string, db *sql.DB) {
 	_, err := db.Query(`UPDATE user_info SET email = ? WHERE user_id = ?`, Email, id)
 	if err != nil {

@@ -81,7 +81,7 @@ func showAndChooseProduct(products []structs.Product) structs.Product {
 	return dictProducts[j]
 
 }
-func informProducts(db *sql.DB, id int) {
+func InformProducts(db *sql.DB, id int) {
 
 }
 func selectProduct(product *structs.Product, chosenProducts *[]Pair, sumPrices *int) {
@@ -314,6 +314,9 @@ func Buy(db *sql.DB, id int) {
 	}
 	GetLog(db, id)
 }
+func ShowLog(id int, db *sql.DB) {
+
+}
 func GetLog(db *sql.DB, id int) {
 	var log structs.Logs
 	result, err := db.Query(`SELECT * FROM logs WHERE user_id=?`, id)
@@ -327,7 +330,7 @@ func GetLog(db *sql.DB, id int) {
 			panic(err)
 		}
 	}
-
+	//show log
 	b, err := json.Marshal(log)
 	if err != nil {
 		fmt.Println("error:", err)
