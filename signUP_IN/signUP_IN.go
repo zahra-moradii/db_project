@@ -48,8 +48,9 @@ func SignUp(Email string, Password string, db *sql.DB) (int, error) {
 	if id != -1 {
 		fmt.Printf("User %s already exists! \nplease signin \n", Email)
 		//return errors.New("user already exists")
+	} else {
+		_, err = db.Query(`INSERT INTO user_info  SET  first_name ='X',last_name='X', email = ?, password =? ,mobile='X',address1='X',address2='X'`, Email, Password)
 	}
-	_, err = db.Query(`INSERT INTO user_info  SET  first_name ='X',last_name='X', email = ?, password =? ,mobile='X',address1='X',address2='X'`, Email, Password)
 	return id, err
 
 }

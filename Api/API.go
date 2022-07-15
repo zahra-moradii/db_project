@@ -21,7 +21,7 @@ func checkErr(c *gin.Context, err error, x gin.H) {
 
 		c.AbortWithError(http.StatusInternalServerError, err)
 	} else {
-		c.JSON(http.StatusOK, x)
+		c.IndentedJSON(http.StatusOK, x)
 	}
 }
 func setupDB() *sql.DB {
@@ -67,89 +67,70 @@ func CreatUser(c *gin.Context) {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": userId, "email": Email, "password": Password, "message": "you signed up successfully!"})
+	c.JSON(http.StatusOK, gin.H{"id": userId, "email": Email, "password": Password, "message": "you signed up successfully!"})
 }
 func SignInUser(c *gin.Context) {
 	Email := c.Param("email")
 	Password := c.Param("password")
 	userId, err := signUP_IN.SignIn(Email, Password, setupDB())
-	if err != nil {
+	if (err != nil) || (userId == -1) {
 		c.String(http.StatusInternalServerError, err.Error())
 
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": userId, "message": "you signed up successfully!"})
+	c.JSON(http.StatusOK, gin.H{"data": userId, "email": Email, "password": Password, "message": "you signed in successfully!"})
 }
 
 func News(c *gin.Context) {
 	Id := getID(c)
 	NewProducts := profile.ShowNews(setupDB(), Id)
-	c.JSON(http.StatusOK, gin.H{"data": NewProducts, "message": "products that were unavailable for you are available now !"})
+	c.JSON(http.StatusOK, gin.H{"newProducts": NewProducts, "id": Id, "message": "products that were unavailable for you are available now !"})
 }
 func ModifyMobile(c *gin.Context) {
 	userId := getID(c)
-	temp := c.Query("mobile")
+	temp := c.Param("mobile")
 	err := profile.Modify_mobile(userId, temp, setupDB())
-	checkErr(c, err, gin.H{"data": userId, "message": "you changed your phone number!"})
+	checkErr(c, err, gin.H{"id": userId, "new_phone_num": temp, "message": "you changed your phone number!"})
 
 }
 func ModifyEmail(c *gin.Context) {
 	Id := getID(c)
-	newEmail := c.Query("email")
+	newEmail := c.Param("email")
 	err := profile.Modify_email(Id, newEmail, setupDB())
-	checkErr(c, err, gin.H{"data": Id, "message": "you changed your Email!"})
+	checkErr(c, err, gin.H{"id": Id, "new_email": newEmail, "message": "you changed your Email!"})
 }
 func ModifyPassword(c *gin.Context) {
-	decoder := json.NewDecoder(c.Request.Body)
-	var user structs.User_info
-	err := decoder.Decode(&user)
-	if err != nil {
-		c.String(http.StatusBadRequest, "request body has wrong format: %s\n", err)
-
-		c.AbortWithError(http.StatusBadRequest, err)
-		return
-	}
-
-	user.User_id = getID(c)
-	newPassword := c.Query("password") ///////////////////////////////
-	err = profile.Modify_password(user.User_id, newPassword, setupDB())
-	checkErr(c, err, gin.H{"userId": user.User_id, "message": "you changed your password!"})
-
-	if err != nil {
-		c.String(http.StatusInternalServerError, err.Error())
-
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	c.String(http.StatusOK, "password successfully updated")
+	Id := getID(c)
+	newPassword := c.Param("password")
+	err := profile.Modify_password(Id, newPassword, setupDB())
+	checkErr(c, err, gin.H{"id": Id, "newpassword": newPassword, "message": "you changed your password!"})
 
 }
 func ModifyAdd2(c *gin.Context) {
 	Id := getID(c)
-	add2 := c.Query("address2")
+	add2 := c.Param("add2")
 	err := profile.Modify_address2(Id, add2, setupDB())
-	checkErr(c, err, gin.H{"data": Id, "message": "you changed your address2!"})
+	checkErr(c, err, gin.H{"id": Id, "new address2": add2, "message": "you changed your address2!"})
 }
 func ModifyAdd1(c *gin.Context) {
 	Id := getID(c)
-	add1 := c.Query("address1")
+	add1 := c.Query("add1")
 	err := profile.Modify_address1(Id, add1, setupDB())
 	checkErr(c, err, gin.H{"data": Id, "message": "you changed your address1!"})
 
 }
 func ModifyLastName(c *gin.Context) {
 	Id := getID(c)
-	lName := c.Query("lastName")
+	lName := c.Param("lastName")
 	err := profile.Modify_lastname(Id, lName, setupDB())
-	checkErr(c, err, gin.H{"data": Id, "message": "you changed your last name!"})
+	checkErr(c, err, gin.H{"id": Id, "new_lastname": lName, "message": "you changed your last name!"})
 }
 func ModifyFirstName(c *gin.Context) {
 	userId := getID(c)
-	temp := c.Query("name")
+	temp := c.Param("firstName")
 	err := profile.Modify_firstname(userId, temp, setupDB())
-	checkErr(c, err, gin.H{"data": userId, "message": "you changed your first name!"})
+	checkErr(c, err, gin.H{"id": userId, "new_firstName": temp, "message": "you changed your first name!"})
 }
 func ProductsByCategory(c *gin.Context) {
 	catId := c.Param("catId")
