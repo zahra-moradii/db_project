@@ -26,11 +26,12 @@ func main() {
 
 	r.GET("/allCategories", API.AllCategories)
 	r.GET("allCategories/:catId", API.ProductsByCategory)
-	//	r.GET("/products", API.AllProducts)
+	r.GET("/products", API.AllProducts)
 	r.GET("/products/:productId", API.GetAllProductsByCategory)
-	/*
-		r.GET("/order", handler.GetAllOrdersHandler)
+	r.GET("/products/:productId/recommends", API.GetRecommend)
 
+	r.GET("/order", API.GetAllOrders)
+	/*
 		//	r.GET("/product/:category", handler.GetProductCatHandler)
 		r.GET("/product/:productId", handler.GetProductHandler)
 		r.GET("/order/:orderId", handler.GetOrderHandler)

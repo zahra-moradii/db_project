@@ -56,11 +56,12 @@ type Orders struct {
 	P_status   string `json:"p_status"`
 }
 type Order_products struct {
-	Order_pro_id int    `json:"order_pro_id"`
-	Order_id     int    `json:"order_id"`
-	Product_id   string `json:"product_id"`
-	Qty          int    `json:"qty"`
-	Amt          int    `json:"amt"`
+	Order_id   int    `json:"order_id"`
+	User_id    int    `json:"user_Id"`
+	Product_id string `json:"product_id"`
+	Qty        int    `json:"qty"`
+	Amt        int    `json:"amt"`
+	Status     string `json:"status"`
 }
 
 type Orders_info struct {

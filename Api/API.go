@@ -104,7 +104,6 @@ func ModifyPassword(c *gin.Context) {
 	err := profile.Modify_password(Id, newPassword, setupDB())
 	checkErr(c, err, gin.H{"data": Id, "message": "you changed your password!"})
 }
-
 func ModifyAdd2(c *gin.Context) {
 	Id := getID(c)
 	add2 := c.Query("address2")
@@ -153,7 +152,6 @@ func AllCategories(c *gin.Context) {
 	checkErr(c, err, gin.H{"categories": allCat, "message": "All categories"})
 
 }
-
 func GetAllProductsByCategory(c *gin.Context) {
 	db := setupDB()
 	allCat, err := pickbuy.GetAllCategories(db)
@@ -168,4 +166,29 @@ func GetAllProductsByCategory(c *gin.Context) {
 
 	}
 
+}
+func AllProducts(c *gin.Context) {
+	products, err := pickbuy.GetAllProducts(setupDB())
+	checkErr(c, err, gin.H{"products": products, "message": "All products"})
+}
+func GetAllOrders(c *gin.Context) {
+	id := getID(c)
+	orders, err := pickbuy.GetAllOrders(setupDB(), id)
+	checkErr(c, err, gin.H{"orders": orders, "userId": id, "message": "All orders"})
+}
+func GetRecommend(c *gin.Context) {
+	productId := c.Param("productId")
+	id, err := strconv.Atoi(productId)
+	checkErr(c, err, gin.H{"data": id})
+	db := setupDB()
+	var p structs.Product
+	result, err := db.Query("SELECT * FROM products WHERE product_id=?", productId)
+	for result.Next() {
+
+		err = result.Scan(&p.Product_id, &p.Product_cat, &p.Product_brand, &p.Product_title,
+			&p.Product_price, &p.Product_desc, &p.Product_image, &p.Product_keywords, &p.Product_count)
+	}
+	products, err := pickbuy.RecommendProducts(db, p)
+
+	checkErr(c, err, gin.H{"products": products, "userId": id, "message": "we recommend you these products"})
 }

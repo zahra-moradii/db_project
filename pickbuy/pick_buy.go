@@ -63,6 +63,46 @@ func GetProductsByCat(category int, db *sql.DB) ([]structs.Product, error) {
 	return products, err
 
 }
+func GetAllOrders(db *sql.DB, id int) ([]structs.Order_products, error) {
+	rows, err := db.Query("SELECT * FROM orders WHERE user_id=?", id)
+	if err != nil {
+		panic(err)
+	}
+	var orders []structs.Order_products
+	for rows.Next() {
+		var order structs.Order_products
+		err = rows.Scan(&order.Order_id, &order.User_id, &order.Product_id, &order.Amt, &order.Qty, &order.Status)
+		if err != nil {
+			//			panic(err)
+			return orders, err
+		}
+		orders = append(orders, order)
+	}
+	return orders, err
+}
+func GetAllProducts(db *sql.DB) ([]structs.Product, error) {
+	var products []structs.Product
+
+	rows, err := db.Query("SELECT * FROM products")
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		var p structs.Product
+
+		err = rows.Scan(&p.Product_id, &p.Product_cat, &p.Product_brand, &p.Product_title,
+			&p.Product_price, &p.Product_desc, &p.Product_image, &p.Product_keywords, &p.Product_count)
+
+		if err != nil {
+
+			return products, err
+		}
+		products = append(products, p)
+	}
+	return products, err
+
+}
 func showAndChooseProduct(products []structs.Product) structs.Product {
 
 	println("\nchoose a product:")
@@ -162,7 +202,7 @@ type Pair struct {
 	amount  int
 }
 
-func recommendProducts(db *sql.DB, product structs.Product) {
+func RecommendProducts(db *sql.DB, product structs.Product) ([]structs.Product, error) {
 	result, err := db.Query(`SELECT * FROM products WHERE product_cat=? and product_title!=?`,
 		product.Product_cat, product.Product_title)
 	if err != nil {
@@ -172,7 +212,7 @@ func recommendProducts(db *sql.DB, product structs.Product) {
 	//var products []structs.Product
 	println("recommended products:")
 	println("product title\t\tamount\t\tbrand\n")
-
+	var products []structs.Product
 	i := 0
 	for result.Next() {
 		if i >= 4 {
@@ -185,11 +225,12 @@ func recommendProducts(db *sql.DB, product structs.Product) {
 
 		if err == nil {
 			fmt.Printf("%d ) %s\t %d \t\t%d\n", i+1, p.Product_title, p.Product_price, p.Product_brand)
+			products = append(products, p)
 		}
 
 		i += 1
 	}
-
+	return products, err
 }
 func Pick(db *sql.DB, id int) ([]Pair, int) {
 	//show categories
@@ -212,7 +253,7 @@ func Pick(db *sql.DB, id int) ([]Pair, int) {
 			//			getProductss()
 
 			selectProduct(db, id, &product, &chosenProducts, &sumPrices)
-			recommendProducts(db, product)
+			RecommendProducts(db, product)
 		}
 		println("to exit enter EXIT.") //yes of no
 		fmt.Scanf("%s", &exit)
@@ -222,19 +263,26 @@ func Pick(db *sql.DB, id int) ([]Pair, int) {
 	}
 	return chosenProducts, sumPrices
 }
+func AddOrder(amount int, p structs.Product, db *sql.DB, id int) error {
+
+	_, err := db.Query(`INSERT INTO orders  SET user_id=?,product_id=?,total_amt=?,count=?,status=?  `,
+		id, p.Product_id, amount*p.Product_price, amount, "SELECTED")
+
+	if err != nil {
+		return err
+		//			panic(err.Error()) // proper error handling instead of panic in your app
+	}
+	return err
+}
 func Order(db *sql.DB, id int) {
 	products, _ := Pick(db, id)
 	//showOrders(products, sumAmount)
-	i := 0
-	for i < len(products) {
-		p := products[i]
-		_, err := db.Query(`INSERT INTO orders  SET user_id=?,product_id=?,total_amt=?,count=?,status=?  `,
-			id, p.product.Product_id, p.amount*p.product.Product_price, p.amount, "SELECTED")
-
+	var p Pair
+	for p = range products {
+		err := AddOrder(p.amount, p.product, db, id)
 		if err != nil {
-			panic(err.Error()) // proper error handling instead of panic in your app
+			panic(err)
 		}
-		i += 1
 	}
 }
 func chooseAddress(db *sql.DB, id int) string {
@@ -285,6 +333,7 @@ func GetProductById(db *sql.DB, product_id int, p *structs.Product) {
 	}
 
 }
+
 func updateLog(db *sql.DB, id int, orderID int, totoalAmount int, cardNum int, cvv int, address string) {
 
 	//make a log
