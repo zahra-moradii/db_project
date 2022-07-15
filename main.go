@@ -1,99 +1,56 @@
 package main
 
 import (
-	"database/sql"
-	"db_p/pickbuy"
-	"db_p/signUP_IN"
-	"github.com/go-sql-driver/mysql"
+	API "db_p/Api"
+	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"log"
 )
 
-/*
-func Users() []*structs.User {
-	// Open up our database connection.
-	db, err := sql.Open("mysql", "db_name:password@tcp(db:port)/test")
-
-	// if there is an error opening the connection, handle it
-	if err != nil {
-		log.Print(err.Error())
-	}
-	defer db.Close()
-
-	// Execute the query
-	results, err := db.Query("SELECT * FROM users")
-	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
-	}
-
-	var users []*structs.User
-	for results.Next() {
-		var u structs.User
-		// for each row, scan the result into our tag composite object
-		err = results.Scan(&u.ID, &u.Username)
-		if err != nil {
-			panic(err.Error()) // proper error handling instead of panic in your app
-		}
-
-		users = append(users, &u)
-	}
-
-	return users
-}
-
-func getUsers(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, Users())
-}
-
-
-func getDatabase() *sql.DB {
-	cfg := mysql.Config{
-		User:                 "root",
-		Passwd:               "ayda",
-		Net:                  "tcp",
-		Addr:                 "127.0.0.1:3306",
-		DBName:               "mySql",
-		AllowNativePasswords: true,
-	}
-
-	db, err := sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if err != nil {
-		log.Print(err.Error())
-	}
-	defer db.Close()
-	return db
-}
-*/
-
 func main() {
-	cfg := mysql.Config{
-		User:                 "root",
-		Passwd:               "ayda",
-		Net:                  "tcp",
-		Addr:                 "127.0.0.1:3306",
-		DBName:               "mySql",
-		AllowNativePasswords: true,
-	}
 
-	db, err := sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
+	r := gin.Default()
+	r.POST("/signUp", API.CreatUser)
+	r.POST("/signIn", API.SignInUser)
 
-	if err != nil {
-		log.Print(err.Error())
-	}
-	defer db.Close()
+	r.GET("/profile/{id}/newProduct", API.Logs)
+	r.GET("/profile/{id}/newProduct", API.News)
+	r.PUT("profile/{id}/modifyName", API.ModifyFirstName)
+	r.PUT("profile/{id}/modifyName", API.ModifyLastName)
+	r.PUT("profile/{id}/modifyName", API.ModifyEmail)
+	r.PUT("profile/{id}/modifyName", API.ModifyPassword)
+	r.PUT("profile/{id}/modifyName", API.ModifyMobile)
+	r.PUT("profile/{id}/modifyName", API.ModifyAdd1)
+	r.PUT("profile/{id}/modifyName", API.ModifyAdd2)
 
-	//router := gin.Default()
-	//router.POST("/users", API.CreateUser)
+	r.GET("/allCategories", API.AllCategories)
+	r.GET("allCategories/:catId", API.ProductsByCategory)
+	r.GET("/products", API.AllProducts)
+	r.GET("/products/:productId", API.GetAllProductsByCategory)
+	/*
+		r.GET("/order", handler.GetAllOrdersHandler)
 
-	id, _ := signUP_IN.SignIn(db)
-	pickbuy.Order(db, id)
-	pickbuy.Buy(db, id)
+		//	r.GET("/product/:category", handler.GetProductCatHandler)
+		r.GET("/product/:productId", handler.GetProductHandler)
+		r.GET("/order/:orderId", handler.GetOrderHandler)
+
+		r.POST("/order", handler.AddOrderHandler)
+		r.POST("/product", handler.AddProductHandler)
+
+		r.PUT("/order/:orderId", handler.UpdateOrderHandler)
+		r.PUT("/product/:productId", handler.UpdateProductHandler)
+
+		r.DELETE("/delete/product/:productId", handler.DeleteProductHandler)
+		r.DELETE("/delete/order/:orderId", handler.DeleteOrderHandler)
+
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	*/
+	log.Println("Listening to port 8080...")
+	log.Fatal(r.Run(":8080"))
+
+	//id, _ := signUP_IN.SignIn(db)
+	//pickbuy.Order(db, id)
+
+	//pickbuy.Buy(db, id)
 }

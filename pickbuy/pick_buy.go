@@ -64,7 +64,8 @@ func GetProductsByCat(category int, db *sql.DB) []structs.Product {
 }
 func showAndChooseProduct(products []structs.Product) structs.Product {
 
-	println("\nchoose a product.")
+	println("\nchoose a product:")
+	println("title\t\t\t price")
 	dictProducts := make(map[int]structs.Product)
 	var j int
 
@@ -72,7 +73,7 @@ func showAndChooseProduct(products []structs.Product) structs.Product {
 	for i < len(products) {
 		dictProducts[i] = products[i]
 		//todo show more info
-		fmt.Printf("%d ) %s\n", i+1, dictProducts[i].Product_title)
+		fmt.Printf("%d ) %s\t%d\t\n", i+1, dictProducts[i].Product_title, dictProducts[i].Product_price)
 		i += 1
 	}
 	fmt.Scanf("%d", &j)
@@ -80,19 +81,20 @@ func showAndChooseProduct(products []structs.Product) structs.Product {
 
 }
 func InformProducts(db *sql.DB, id int) {
-	result, err := db.Query(`SELECT product_id,total_amt  FROM orders WHERE user_id=? and status=? `, id, "SELECTION FAILED")
+	result, err := db.Query(`SELECT order_id,product_id,total_amt  FROM orders WHERE user_id=? and status=? `, id, "SELECTION FAILED")
 	if err != nil {
 		panic(err)
 	}
 	for result.Next() {
 		var pID int
 		var amount int
-		err = result.Scan(&pID, &amount)
+		var orderID int
+		err = result.Scan(&orderID, &pID, &amount)
 		if err != nil {
 			panic(err)
 		}
 		var p structs.Product
-		result2, err := db.Query(`SELECT product_id  FROM orders WHERE user_id=? and status=? `, id)
+		result2, err := db.Query(`SELECT *  FROM products WHERE  product_id=?`, pID)
 		if err != nil {
 			panic(err)
 		}
@@ -104,11 +106,11 @@ func InformProducts(db *sql.DB, id int) {
 
 		if p.Product_count >= amount {
 			fmt.Printf("product %s is available now\n", p.Product_title)
+			_, err = db.Query(`DELETE FROM orders  WHERE order_id=? `, orderID)
 		} else {
 			fmt.Printf("product %s is not available yet!\n", p.Product_title)
 		}
 	}
-
 }
 func selectProduct(db *sql.DB, id int, product *structs.Product, chosenProducts *[]Pair, sumPrices *int) {
 	//check if the product is available ?
@@ -142,7 +144,7 @@ func selectProduct(db *sql.DB, id int, product *structs.Product, chosenProducts 
 	}
 
 }
-func showOrders(selectedProducts []Pair, totalAmount int) {
+func ShowOrders(selectedProducts []Pair, totalAmount int) {
 	println("product title\t\tprice\t\tamount\n")
 	i := 0
 	for i < len(selectedProducts) {
@@ -329,8 +331,8 @@ func Buy(db *sql.DB, id int) {
 		products = append(products, Pair{product, count})
 	}
 	//show products
-	println("all your orders:")
-	showOrders(products, sum)
+	println("\nall your orders:")
+	ShowOrders(products, sum)
 	var ans int
 	println("\nAre you sure you want to buy?\n0)NO\n1)YES\n")
 	fmt.Scanf("%d", &ans)

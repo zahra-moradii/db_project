@@ -3,8 +3,6 @@ package profile
 import (
 	"database/sql"
 	"db_p/structs"
-	"fmt"
-
 	//"db_p/pickbuy"
 	"errors"
 	//"fmt"
@@ -17,20 +15,22 @@ import (
 //todo is this an admin or not   profiles are different
 
 //are the orders available or not yet
-func showNews(db *sql.DB, id int) {
-	result, err := db.Query(`SELECT product_id,total_amt  FROM orders WHERE user_id=? and status=? `, id, "SELECTION FAILED")
+func ShowNews(db *sql.DB, id int) []structs.Product {
+	result, err := db.Query(`SELECT order_id,product_id,total_amt  FROM orders WHERE user_id=? and status=? `, id, "SELECTION FAILED")
+	var products []structs.Product
 	if err != nil {
 		panic(err)
 	}
 	for result.Next() {
 		var pID int
 		var amount int
-		err = result.Scan(&pID, &amount)
+		var orderID int
+		err = result.Scan(&orderID, &pID, &amount)
 		if err != nil {
 			panic(err)
 		}
 		var p structs.Product
-		result2, err := db.Query(`SELECT product_id  FROM orders WHERE user_id=? and status=? `, id)
+		result2, err := db.Query(`SELECT *  FROM products WHERE  product_id=?`, pID)
 		if err != nil {
 			panic(err)
 		}
@@ -41,43 +41,46 @@ func showNews(db *sql.DB, id int) {
 		}
 
 		if p.Product_count >= amount {
-			fmt.Printf("product %s is available now\n", p.Product_title)
+			//fmt.Printf("product %s is available now\n", p.Product_title)
+			_, err = db.Query(`DELETE FROM orders  WHERE order_id=? `, orderID)
+			products = append(products, p)
 		} else {
-			fmt.Printf("product %s is not available yet!\n", p.Product_title)
+			//fmt.Printf("product %s is not available yet!\n", p.Product_title)
 		}
 	}
+	return products
 	//or //use -> pickbuy.InformProducts(db, id)
 }
-func showLogs(db *sql.DB, id int) {
+func ShowLogs(db *sql.DB, id int) {
 	//todo  use ->pickbuy.ShowLog(id, db)
 }
-func modify_email(id int, Email string, db *sql.DB) {
+func Modify_email(id int, Email string, db *sql.DB) {
 	_, err := db.Query(`UPDATE user_info SET email = ? WHERE user_id = ?`, Email, id)
 	if err != nil {
 		errors.New("could not change email")
 	}
 }
-func modify_password(id int, Password string, db *sql.DB) {
+func Modify_password(id int, Password string, db *sql.DB) {
 
 	_, err := db.Query(`UPDATE user_info SET password = ? WHERE user_id = ?`, Password, id)
 	if err != nil {
 		errors.New("could not change password")
 	}
 }
-func modify_firstname(id int, fname string, db *sql.DB) {
+func Modify_firstname(id int, fname string, db *sql.DB) {
 
 	_, err := db.Query(`UPDATE user_info SET first_name = ?	WHERE user_id = ?`, fname, id)
 	if err != nil {
 		errors.New("could not change first_name")
 	}
 }
-func modify_lastname(id int, lname string, db *sql.DB) {
+func Modify_lastname(id int, lname string, db *sql.DB) {
 	_, err := db.Exec(`UPDATE user_info SET last_name = ? WHERE user_id = ?`, lname, id)
 	if err != nil {
 		errors.New("could not change last_name")
 	}
 }
-func modify_mobile(id int, phnoeNum string, db *sql.DB) {
+func Modify_mobile(id int, phnoeNum string, db *sql.DB) {
 	_, err := db.Query(`UPDATE user_info SET mobile = ? WHERE user_id = ?;`, phnoeNum, id)
 	if err != nil {
 		errors.New("could not change email")

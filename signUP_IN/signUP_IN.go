@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"golang.org/x/crypto/ssh/terminal"
 )
 
 func userExist(Email string, db *sql.DB) (int, bool) {
@@ -27,15 +26,15 @@ func userExist(Email string, db *sql.DB) (int, bool) {
 	}
 	return id, true
 }
-func SignUp(db *sql.DB) error {
-	var Email string
-	fmt.Println("Enter email:")
-	fmt.Scanln(&Email)
-	fmt.Println("Enter password: ")
-	Password, err := terminal.ReadPassword(0)
-	if err != nil {
-		panic(err)
-	}
+func SignUp(Email string, Password string, db *sql.DB) (int, error) {
+	//	var Email string
+	//	fmt.Println("Enter email:")
+	//	fmt.Scanln(&Email)
+	//	fmt.Println("Enter password: ")
+	//	Password, err := terminal.ReadPassword(0)
+	//	if err != nil {
+	//		panic(err)
+	//	}
 
 	var id = -1
 
@@ -48,27 +47,23 @@ func SignUp(db *sql.DB) error {
 	}
 	if id != -1 {
 		fmt.Printf("User %s already exists! \nplease signin \n", Email)
-		return errors.New("user already exists")
+		//return errors.New("user already exists")
 	}
 	_, err = db.Query(`INSERT INTO user_info  SET  first_name ='X',last_name='X', email = ?, password =? ,mobile='X',address1='X',address2='X'`, Email, Password)
-
-	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
-	}
-	return nil
+	return id, err
 
 }
-func SignIn(db *sql.DB) (int, error) {
-	var Email string
+func SignIn(Email string, Password string, db *sql.DB) (int, error) {
+	//	var Email string
 	// get email, password and then check in database
 
-	fmt.Println("Enter email:")
-	fmt.Scanln(&Email)
-	fmt.Println("Enter password: ")
-	password, err := terminal.ReadPassword(0)
-	if err != nil {
-		panic(err)
-	}
+	//fmt.Println("Enter email:")
+	//fmt.Scanln(&Email)
+	//fmt.Println("Enter password: ")
+	//	password, err := terminal.ReadPassword(0)
+	//	if err != nil {
+	//		panic(err)
+	//	}
 
 	var id = -1
 	var id2 = -1
@@ -76,7 +71,7 @@ func SignIn(db *sql.DB) (int, error) {
 	id, exist = userExist(Email, db)
 	if exist == true {
 		//check password
-		result, err := db.Query("SELECT user_id FROM user_info WHERE password=?", password)
+		result, err := db.Query("SELECT user_id FROM user_info WHERE password=?", Password)
 		if err != nil {
 			panic(err)
 		}
