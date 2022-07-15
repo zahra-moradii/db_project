@@ -31,8 +31,8 @@ func main() {
 	r.GET("/products/recommends/:productId", API.GetRecommend)
 
 	r.GET("/orders/:id", API.GetAllOrders)
-	r.POST("/order/:id", API.AddOrder)
-	r.DELETE("/delete/order/:orderId", API.DeleteOrder)
+	r.GET("/order/:id", API.AddOrder)
+	r.GET("/delete/order/:orderId", API.DeleteOrder)
 
 	r.GET("/buyOrders/:id/:cvv/:cardNumber/:address", API.BuyOrders)
 
