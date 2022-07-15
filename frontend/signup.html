@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports World</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- OWL Car -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <!-- Showmore css -->
+    <link rel="stylesheet" href="css/showMoreItems-theme.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="cstm-header">
+        <!-- Sign In Modal -->
+        <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-light">
+                        <h5 class="modal-title" id="exampleModalLabel">Sign In</h5>
+                        <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1">
+                            </div>
+                            <button type="submit" class="btn btn-dark">Submit</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer bg-dark text-light">
+                        <h5 class="d-block">Don't have an account?</h5>
+                        <button type="button" class="btn btn-sm bg-light">Create
+                            Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <!-- Navigation bar -->
+            <div class="row">
+                <div class="col-12">
+                    <nav class="navbar navbar-expand-lg navbar-dark cstm-header">
+                        <a class="navbar-brand" href="index.html"><img src="./img/logo.png" width="200px"
+                                class="img-fluid" alt="logo"></a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item active">
+                                    <a class="nav-link mx-2" href="index.html">Home <span
+                                            class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mx-2" href="cart.html">Order</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mx-2" href="dashboard.html">Dashboard</a>
+                                </li>
+                            </ul>
+                            <button class="btn btn-outline-light mx-2" data-toggle="modal"
+                                data-target="#login">Login</button>
+                            <a href="signup.html"><button class="btn btn-outline-light mx-2">Sign Up</button></a>
+
+                            <button class="btn btn-light my-2 my-sm-0" type="submit"><i class="fa fa-shopping-cart"></i>
+                                Cart <span id="numberOfProduct"> 2</span></button>
+
+
+                        </div>
+                    </nav>
+                </div>
+            </div> <!-- Navigation bar end -->
+        </div>
+    </header>
+
+    <!-- SignUp Form Start -->
+    <section>
+        <div class="col-12 col-md-10 col-lg-6 mx-auto mt-5 p-3 mb-5">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4 class="text-center">Create Your Account</h4>
+                        <hr>
+                    </div>
+                    <form data-toggle="validator" id="form" onsubmit="return validation()">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="firstname"> <span class="text-danger align-middle">* </span>First
+                                    Name:</label>
+                                <input type="text" class="form-control" id="firstname" placeholder="First Name"
+                                    autocomplete="off">
+                                <div class="invalid-feedback">
+                                    First Character Must be Capital and minimum 3 Characters.
+                                </div>
+                                <div class="valid-feedback">
+                                    First Name Format is Valid.
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="lastname"><span class="text-danger align-middle">* </span>Last Name:</label>
+                                <input type="text" class="form-control" id="lastname" placeholder="Last Name"
+                                    autocomplete="off">
+                                <div class="invalid-feedback">
+                                    First Character Must be Capital and minimum 3 Characters.
+                                </div>
+                                <div class="valid-feedback">
+                                    Last Name Format is Valid.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><span class="text-danger align-middle">* </span>Email:</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter Email Address"
+                                autocomplete="off">
+                            <div class="invalid-feedback">
+                                Incorrect Email format.
+                            </div>
+                            <div class="valid-feedback">
+                                Email Looks Good.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"><span class="text-danger align-middle">* </span>Mobile:</label>
+                            <input type="tel" class="form-control" id="phone" placeholder="Enter Mobile Number"
+                                autocomplete="off">
+                            <div class="invalid-feedback">
+                                Must Begin with + and min 6 and max 14
+                            </div>
+                            <div class="valid-feedback">
+                                Phone Number Looks Good.
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="address"><span class="text-danger align-middle">* </span>Address:</label>
+                                <input type="text" class="form-control" id="address" placeholder="address" autocomplete="off">
+                                <div class="invalid-feedback">
+                                    address Name at least 3 Character.
+                                </div>
+                                <div class="valid-feedback">
+                                    address Name Looks Good.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password"><span class="text-danger align-middle">* </span>Password:</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter Your Password"
+                                autocomplete="off">
+                            <div class="invalid-feedback">
+                                Minimum 8 characters max 16 chars at least 1 Uppercase Alphabet, 1 Lowercase Alphabet, 1
+                                Number and 1 Special Character
+                            </div>
+                            <div class="valid-feedback">
+                                Password Number Looks Good.
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark d-block mx-auto">Sign up</button>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- SignUp Form End -->
+
+
+    <!-- Footer Section -->
+    <footer class=" cstm-header pt-5">
+        <div class="container text-light">
+            <div class="row text-center">
+                <div class="col-12 col-md-4">
+                    <h3 class="pb-3">About Us</h3>
+                    <p>This is an Online Shop as database course project<br/>powered by : Ayda - Mina - Zahra</p>
+                </div>
+                <div class="col-12 col-md-4">
+                    <h3 class="pb-3">Contact Us</h3>
+                    <p><i class="fa fa-envelope" aria-hidden="true"></i> testemail@gmail.com</p>
+                    <p><i class="fa fa-phone-square" aria-hidden="true"></i> +98 123456789</p>
+                </div>
+                <div class="col-12 col-md-4">
+                    <h3 class="pb-3">Follow Us</h3>
+                    <div class="social-icon">
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-light"><i class="fa fa-facebook" aria-hidden="true"></i>
+                                    Facebook</a></li>
+                            <li><a href="#" class="text-light"><i class="fa fa-twitter" aria-hidden="true"></i>
+                                    Twitter</a></li>
+                            <li><a href="#" class="text-light"><i class="fa fa-instagram" aria-hidden="true"></i>
+                                    Instagram</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Bootstrap js -->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/popper.js"></script>
+    <!-- OWL Car -->
+    <script src="js/owl.carousel.min.js"></script>
+    <!-- Show More js -->
+    <script src="js/showMoreItems.min.js"></script>
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- Theme js -->
+    <script type="text/javascript" src="js/main.js"></script>
+    <!-- Validation js -->
+    <script src="js/validation.js"></script>
+</body>
+
+</html>

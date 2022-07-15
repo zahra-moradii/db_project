@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports World</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- OWL Car -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <!-- Showmore css -->
+    <link rel="stylesheet" href="css/showMoreItems-theme.min.css">
+    <!-- Data Table -->
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-light">
+        <button class="navbar-toggler ml-auto mb-2 bg-light" type="button" data-toggle="collapse" data-target="#mynav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mynav">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="col-lg-2 col-md-4 fixed-top sidebar">
+                        <a href="index.html"
+                            class="navbar-brand text-light d-block mx-auto text-center py-3 mb-4 bottom-border"><img
+                                src="./img/logo.png" class="img-fluid" width="200px" alt="logo"></a>
+                        <ul class="navbar-nav flex-column mt-5">
+                            <li class="nav-item">
+                                <a href="dashboard.html" class="nav-link text-light p-3 mb-2 sidebar-link">
+                                    <i class="fa fa-home text-light fa-lg mr-3"></i>Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="allproduct.html" class="nav-link text-light p-3 mb-2 sidebar-link current">
+                                    <i class="fa fa-database text-light fa-lg mr-3"></i>All Product
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="addproduct.html" class="nav-link text-light p-3 mb-2 sidebar-link">
+                                    <i class="fa fa-plus-circle text-light fa-lg mr-3"></i>Add Product
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="editproduct.html" class="nav-link text-light p-3 mb-2 sidebar-link">
+                                    <i class="fa fa-pencil-square-o text-light fa-lg mr-3"></i>Edit Product
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="removeproduct.html" class="nav-link text-light p-3 mb-2 sidebar-link">
+                                    <i class="fa fa-trash text-light fa-lg mr-3"></i>Remove Product
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-light p-3 mb-2 sidebar-link">
+                                    <i class="fa fa-cogs text-light fa-lg mr-3"></i>Settings
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Top Nav -->
+                    <div class="col-lg-10 col-md-8 ml-auto fixed-top cstm-header align-items-center top-nav">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-8 d-flex justify-content-center align-items-center pl-5">
+                                <ul class="navbar-nav mr-auto">
+                                    <li class="nav-item active">
+                                        <a class="nav-link mx-2 text-light" href="index.html">Home <span
+                                                class="sr-only">(current)</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link mx-2 text-light" href="cart.html">Order</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link mx-2 text-light" href="dashboard.html">Dashboard</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6 d-none d-lg-block">
+                                <form class="form-inline">
+                                    <input class="form-control mx-2 my-2" type="search" placeholder="Search"
+                                        aria-label="Search">
+                                    <button class="btn btn-light" type="submit"><i class="fa fa-search"
+                                            aria-hidden="true"></i>
+                                    </button>
+                                </form>
+
+                            </div>
+                            <div class="col-md-4 col-lg-2 mt-2 justify-content-end align-items-center">
+                                <button class="btn btn-outline-light mx-2" data-toggle="modal" data-target="#logout"><i
+                                        class="fa fa-sign-out" aria-hidden="true"></i>
+                                    Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Top Nav Ends -->
+                </div>
+            </div>
+        </div>
+
+    </nav>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logout">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Do You Really Want to Leave?</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- <div class="modal-body">
+                    <h5>Press Logout to leave</h5>
+                </div> -->
+                <div class="modal-footer bg-dark">
+                    <button type="button" class="btn btn-light">Stay Here</button>
+                    <button type="button" class="btn btn-danger">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Logout Modal Ends -->
+
+
+    <!-- Table Start -->
+    <section>
+        <div class="container-fluid">
+            <div class="row ">
+                <div class="col-lg-10 col-md-8 ml-auto">
+                    <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                        <!-- First Table -->
+                        <div class="col-12 mb-4 mb-xl-0">
+                            <h4 class="text-muted text-center mb-3">All Products</h4>
+                            <table class="table bg-light table-striped  text-center" id="allproduct">
+                                <thead>
+                                    <tr class="text-muted">
+                                        <th>#SL</th>
+                                        <th>Product ID</th>
+                                        <th>Product Image</th>
+                                        <th>Product Name</th>
+                                        <th>Price</th>
+                                        <th>Avaiability</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th class="align-middle">1</th>
+                                        <td class="align-middle">pr001</td>
+                                        <td class="align-middle"><img src="./img/product/product-1.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-success w-60 py-2">Available</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">2</th>
+                                        <td class="align-middle">pr002</td>
+                                        <td class="align-middle"><img src="./img/product/product-2.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-success w-60 py-2">Available</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">3</th>
+                                        <td class="align-middle">pr003</td>
+                                        <td class="align-middle"><img src="./img/product/product-3.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-success w-60 py-2">Available</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">4</th>
+                                        <td class="align-middle">pr004</td>
+                                        <td class="align-middle"><img src="./img/product/product-4.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-danger w-60 py-2">Unavailable</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">5</th>
+                                        <td class="align-middle">pr005</td>
+                                        <td class="align-middle"><img src="./img/product/product-5.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-success w-60 py-2">Available</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">6</th>
+                                        <td class="align-middle">pr001</td>
+                                        <td class="align-middle"><img src="./img/product/product-6.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-danger w-60 py-2">Unavailable</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">7</th>
+                                        <td class="align-middle">pr007</td>
+                                        <td class="align-middle"><img src="./img/product/product-7.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-success w-60 py-2">Available</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">8</th>
+                                        <td class="align-middle">pr008</td>
+                                        <td class="align-middle"><img src="./img/product/product-8.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-danger w-60 py-2">Unavailable</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">9</th>
+                                        <td class="align-middle">pr009</td>
+                                        <td class="align-middle"><img src="./img/product/product-9.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-success w-60 py-2">Available</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">10</th>
+                                        <td class="align-middle">pr0010</td>
+                                        <td class="align-middle"><img src="./img/product/product-13.jpg" width="70px"
+                                                alt="product-1"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-danger w-60 py-2">Unavailable</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle">11</th>
+                                        <td class="align-middle">pr0012</td>
+                                        <td class="align-middle"><img src="./img/product/product-12.jpg" width="70px"
+                                                alt="product-12"></td>
+                                        <td class="align-middle">Black Shoe</td>
+                                        <td class="align-middle">$99</td>
+                                        <td class="align-middle"><span
+                                                class="badge badge-danger w-60 py-2">Unavailable</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Table End -->
+
+
+
+    <!-- Bootstrap js -->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/popper.js"></script>
+    <!-- OWL Car -->
+    <script src="js/owl.carousel.min.js"></script>
+    <!-- Show More js -->
+    <script src="js/showMoreItems.min.js"></script>
+    <!-- Data TAble -->
+    <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- Theme js -->
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>

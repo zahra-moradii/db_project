@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports World</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- OWL Car -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <!-- Showmore css -->
+    <link rel="stylesheet" href="css/showMoreItems-theme.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="cstm-header">
+        <!-- Sign In Modal -->
+        <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-light">
+                        <h5 class="modal-title" id="exampleModalLabel">Sign In</h5>
+                        <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" onsubmit="return validate()">
+                            <div class="form-group">
+                                <label for="email">Email address</label>
+                                <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                                    autocomplete="off">
+                                <div class="invalid-feedback">
+                                    Incorrect Email format.
+                                </div>
+                                <div class="valid-feedback">
+                                    Email Looks Good.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password">
+                                <div class="invalid-feedback">
+                                    Please Enter Password
+                                </div>
+                                <div class="valid-feedback">
+                                    Password Looks Good.
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-dark">Submit</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer bg-dark text-light">
+                        <h5 class="d-block">Don't have an account?</h5>
+                        <a href="signup.html"><button type="button" class="btn btn-sm bg-light">Create
+                                Now</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Signin Modal End -->
+        <!-- Product Details Modal Start -->
+        <div class="modal fade cstm-modal" id="productdetails" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productdetails">Product Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12 col-md-6 d-flex justify-content-center align-items-center shadow">
+                                    <div class="card">
+                                        <img src="img/product/product-15.jpg" alt="product" width="300px"
+                                            class="img-fluid">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 p-3">
+                                    <h5>Black Shoe</h5>
+                                    <h5 class="mb-5">$99.99</h5>
+                                    <hr>
+                                    <p>Product Id# pr0015</p>
+                                    <p class="badge badge-success w-25 p-2">In Stock</p>
+                                    <hr>
+                                    <h6>Description</h6>
+                                    <p class="font-weight-light">Lorem ipsum, dolor sit amet consectetur adipisicing
+                                        elit. Illo natus doloribus
+                                        dolore? Quam, tempore</p>
+                                    <a href="#" class="btn btn-dark btn-block">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product Details Modal End -->
+        <div class="container-fluid">
+            <!-- Navigation bar -->
+            <div class="row">
+                <div class="col-12">
+                    <nav class="navbar navbar-expand-lg navbar-dark cstm-header">
+                        <a class="navbar-brand" href="index.html"><img src="./img/logo.png" width="200px"
+                                class="img-fluid" alt="logo"></a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item active">
+                                    <a class="nav-link mx-2" href="index.html">Home <span
+                                            class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mx-2" href="cart.html">Order</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mx-2" href="dashboard.html">Dashboard</a>
+                                </li>
+                            </ul>
+                            <form class="form-inline d-none d-lg-block">
+                                <input class="form-control mx-2 my-2" type="search" placeholder="Search"
+                                    aria-label="Search">
+                                <button class="btn btn-light" type="submit"><i class="fa fa-search"
+                                        aria-hidden="true"></i>
+                                </button>
+                            </form>
+                            <button class="btn btn-outline-light mx-2" data-toggle="modal"
+                                data-target="#login">Login</button>
+                            <a href="signup.html"><button class="btn btn-outline-light mx-2">Sign Up</button></a>
+
+                            <button class="btn btn-light my-2 my-sm-0" type="submit"><i class="fa fa-shopping-cart"></i>
+                                Cart <span id="numberOfProduct"> 2</span></button>
+
+
+                        </div>
+                    </nav>
+                </div>
+            </div> <!-- Navigation bar end -->
+        </div>
+    </header>
+
+
+    <!-- Feature Section -->
+    <section class="pt-5">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2>ITEMS</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="owl-carousel owl-theme">
+                        <div class="item">
+                            <div class="card shadow-lg text-center" style="width: 18rem;">
+                                <img src="img/product/product-1.jpg" class="card-img-top img-fluid" alt="product-1">
+                                <div class="card-body cstm-body">
+                                    <h5 class="card-title">Black Shoe</h5>
+                                    <p class="card-text">$120</p>
+                                    <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                        data-target="#productdetails">Details</button>
+                                    <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card shadow-lg text-center" style="width: 18rem;">
+                                <img src="img/product/product-2.jpg" class="card-img-top img-fluid" alt="product-2">
+                                <div class="card-body cstm-body">
+                                    <h5 class="card-title">Gray Jacket</h5>
+                                    <p class="card-text">$120</p>
+                                    <!-- <a href="#" class="btn btn-light btn-block">Details</a> -->
+                                    <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                        data-target="#productdetails">Details</button>
+                                    <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card shadow-lg text-center" style="width: 18rem;">
+                                <img src="img/product/product-3.jpg" class="card-img-top img-fluid" alt="product-3">
+                                <div class="card-body cstm-body">
+                                    <h5 class="card-title">Grey shoe</h5>
+                                    <p class="card-text">$120</p>
+                                    <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                        data-target="#productdetails">Details</button>
+                                    <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card shadow-lg text-center" style="width: 18rem;">
+                                <img src="img/product/product-4.jpg" class="card-img-top img-fluid" alt="product-4">
+                                <div class="card-body cstm-body">
+                                    <h5 class="card-title">Black Short</h5>
+                                    <p class="card-text">$120</p>
+                                    <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                        data-target="#productdetails">Details</button>
+                                    <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card shadow-lg text-center" style="width: 18rem;">
+                                <img src="img/product/product-5.jpg" class="card-img-top img-fluid" alt="product-5">
+                                <div class="card-body cstm-body">
+                                    <h5 class="card-title">Sport Watch</h5>
+                                    <p class="card-text">$120</p>
+                                    <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                        data-target="#productdetails">Details</button>
+                                    <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="card shadow-lg text-center" style="width: 18rem;">
+                                <img src="img/product/product-6.jpg" class="card-img-top img-fluid" alt="product-6">
+                                <div class="card-body cstm-body">
+                                    <h5 class="card-title">Polyster jacket</h5>
+                                    <p class="card-text">$120</p>
+                                    <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                        data-target="#productdetails">Details</button>
+                                    <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner Section -->
+    <section class="pt-5">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-content-center cstm-banner">
+                <div class="col-12 col-md-4">
+                </div>
+                <div class="col-6"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Product Section -->
+    <section class="pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2>OUR PRODUCTS</h2>
+                </div>
+            </div>
+            <!-- Product row -->
+            <div class="row row-cols-xs-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 more">
+                <div class="item">
+                    <div class="col mb-4 text-center">
+                        <div class="card">
+                            <img src="img/product/product-12.jpg" class="card-img-top align-self-center product-img"
+                                alt="product-12">
+                            <div class="card-body cstm-body">
+                                <h5 class="card-title">Nike Runnig shoe</h5>
+                                <p class="card-text">$129.00</p>
+                                <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                    data-target="#productdetails">Details</button>
+                                <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="col mb-4 text-center">
+                        <div class="card">
+                            <img src="img/product/product-13.jpg" class="card-img-top align-self-center product-img"
+                                alt="product-13">
+                            <div class="card-body cstm-body">
+                                <h5 class="card-title">Rugby Ball</h5>
+                                <p class="card-text">$76.49</p>
+                                <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                    data-target="#productdetails">Details</button>
+                                <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="col mb-4 text-center">
+                        <div class="card">
+                            <img src="img/product/product-14.jpg" class="card-img-top align-self-center product-img"
+                                alt="product-14">
+                            <div class="card-body cstm-body">
+                                <h5 class="card-title">Puma Shoe</h5>
+                                <p class="card-text">$139.99</p>
+                                <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                    data-target="#productdetails">Details</button>
+                                <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="col mb-4 text-center">
+                        <div class="card">
+                            <img src="img/product/product-15.jpg" class="card-img-top align-self-center product-img"
+                                alt="product-15">
+                            <div class="card-body cstm-body">
+                                <h5 class="card-title">Soocer Shocks</h5>
+                                <p class="card-text">$69.00</p>
+                                <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                    data-target="#productdetails">Details</button>
+                                <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="col mb-4 text-center">
+                        <div class="card">
+                            <img src="img/product/product-16.jpg" class="card-img-top align-self-center product-img"
+                                alt="product-16">
+                            <div class="card-body cstm-body">
+                                <h5 class="card-title">cr7 Underwear</h5>
+                                <p class="card-text">$149.00</p>
+                                <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                    data-target="#productdetails">Details</button>
+                                <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="col mb-4 text-center">
+                        <div class="card">
+                            <img src="img/product/product-17.jpg" class="card-img-top align-self-center product-img"
+                                alt="product-17">
+                            <div class="card-body cstm-body">
+                                <h5 class="card-title">Black Sport Gloves</h5>
+                                <p class="card-text">$39.00</p>
+                                <button type="button" class="btn btn-light btn-block" data-toggle="modal"
+                                    data-target="#productdetails">Details</button>
+                                <a href="#" class="btn btn-light btn-block">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Another Banner Section -->
+    <section class="pt-5 text-light">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-content-center cstm-banner-2">
+                <div class="col-12 col-md-4">   
+                </div>
+                <div class="col-6"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class=" cstm-header pt-5">
+        <div class="container text-light">
+            <div class="row text-center">
+                <div class="col-12 col-md-4">
+                    <h3 class="pb-3">About Us</h3>
+                    <p>This is an Online Shop as database course project<br/>powered by : Ayda - Mina - Zahra</p>
+                </div>
+                <div class="col-12 col-md-4">
+                    <h3 class="pb-3">Contact Us</h3>
+                    <p><i class="fa fa-envelope" aria-hidden="true"></i> testemail@gmail.com</p>
+                    <p><i class="fa fa-phone-square" aria-hidden="true"></i> +98 123456789</p>
+                </div>
+                <div class="col-12 col-md-4">
+                    <h3 class="pb-3">Follow Us</h3>
+                    <div class="social-icon">
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-light"><i class="fa fa-facebook" aria-hidden="true"></i>
+                                    Facebook</a></li>
+                            <li><a href="#" class="text-light"><i class="fa fa-twitter" aria-hidden="true"></i>
+                                    Twitter</a></li>
+                            <li><a href="#" class="text-light"><i class="fa fa-instagram" aria-hidden="true"></i>
+                                    Instagram</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script For Login Validation -->
+    <script>
+        var email = document.getElementById('email');
+        var pass = document.getElementById('password');
+
+        email.addEventListener('keyup', checkemailvalidity);
+
+        function checkemailvalidity(e) {
+            var validemail = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/;
+            var emailval = email.value;
+            if (validemail.test(emailval)) {
+                email.classList.add('is-valid');
+                email.classList.remove('is-invalid');
+            } else {
+                email.classList.add('is-invalid');
+                email.classList.remove('is-valid');
+            }
+        }
+        function validate() {
+            var emailvalue = email.value;
+            var passvalue = pass.value;
+
+            if (emailvalue == '') {
+                email.classList.add('is-invalid');
+                return false;
+            }
+            if (passvalue == '') {
+                pass.classList.add('is-invalid');
+                return false;
+            }
+
+        }
+    </script>
+
+    <!-- Bootstrap js -->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/popper.js"></script>
+    <!-- OWL Car -->
+    <script src="js/owl.carousel.min.js"></script>
+    <!-- Show More js -->
+    <script src="js/showMoreItems.min.js"></script>
+
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- Theme js -->
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+}
+.item {
+  padding: 15px 0px 15px 0px;
+}
+.cstm-body {
+  border-top: 2px solid rgb(255, 255, 255);
+  background: rgb(152, 130, 170);
+  color: rgb(26, 4, 39);
+}
+.cstm-header {
+  background: linear-gradient(rgb(97, 60, 184), rgb(190, 99, 178));
+  padding: 12px 0px 12px 0px;
+}
+.cstm-carousel {
+  /* height: 90%; */
+}
+
+/* .cstm-nav {
+  position: sticky;
+  top: 0;
+} */
+.cstm-banner {
+  background-image: url('../img/banner-2.webp');
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 400px;
+}
+.cstm-banner-2 {
+  background-image: url('../img/bg-3.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 400px;
+  /* margin-bottom: 50px; */
+}
+.product-img {
+  width: 70%;
+}
+
+/* Cart Page CSS Start */
+.my-cart {
+  background-image: url(../img/bg-3.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.product-image img {
+  /* min-width: 200px; */
+  max-height: 175px;
+}
+.product-name {
+  color: rgb(48, 46, 155);
+  font-size: 22px;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+.cart-title p {
+  color: #0e0535;
+  font-size: 14px;
+}
+.remove-wish {
+  color: #e4382b;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+.price-money {
+  color: #44d800;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+.page-link {
+  line-height: 22px;
+  width: 40px;
+  font-size: 11px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #007cf8;
+}
+.page-link:hover {
+  text-decoration: none;
+  outline: none !important;
+}
+.page-link:focus {
+  box-shadow: none;
+}
+.page-item input {
+  line-height: 16px;
+  padding: 3px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.price-individual {
+  color: #000000;
+}
+
+/* Dashboard CSS */
+.sidebar {
+  height: 100vh;
+  background-color: rgb(80, 79, 79);
+}
+
+.bottom-border {
+  border-bottom: 1px groove rgb(255, 255, 255);
+}
+.sidebar-link {
+  transition: all 0.4s;
+}
+.sidebar-link:hover {
+  background-color: #7476eb;
+  border-radius: 5px;
+}
+.current {
+  background-color: #f44336;
+  border-radius: 7px;
+  box-shadow: 1px 5px 10px rgb(17, 17, 17);
+  transition: all 0.4s;
+}
+.current:hover {
+  background-color: #f66436;
+  border-radius: 7px;
+  box-shadow: 1px 5px 20px #111;
+  transform: translate(-1px);
+}
+
+@media (max-width: 786px) {
+  .sidebar {
+    position: static;
+    height: auto;
+  }
+  .top-nav {
+    position: static;
+  }
+  /* .sidebar-link {
+    font-size: 13px;
+  } */
+}
+
+.accepted-card {
+  background-color: #999;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+/* Modal width */
+.cstm-modal .modal-dialog {
+  max-width: 750px;
+}

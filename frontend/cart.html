@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports World</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- OWL Car -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <!-- Showmore css -->
+    <link rel="stylesheet" href="css/showMoreItems-theme.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header class="cstm-header">
+        <!-- Logout Modal -->
+        <div class="modal fade" id="logout">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-light">
+                        <h5 class="modal-title">Do You Really Want to Leave?</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- <div class="modal-body">
+                    <h5>Press Logout to leave</h5>
+                </div> -->
+                    <div class="modal-footer bg-dark">
+                        <button type="button" class="btn btn-light">Stay Here</button>
+                        <button type="button" class="btn btn-danger">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Logout Modal Ends -->
+        <!-- Payment Modal Start -->
+        <div class="modal fade" id="payment" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="payment">Enter Card Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="accepted-card d-flex justify-content-between align-items-center">
+                                    </div>
+                                    <form action="">
+                                        <div class="form-group">
+                                            <label for="cardname">Name on Card:</label>
+                                            <input type="text" class="form-control" id="cardname">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cardnumber">Card Number:</label>
+                                            <input type="text" class="form-control" id="cardnumber">
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="cvc">CVC</label>
+                                                <input type="text" class="form-control" id="cvc" placeholder="ex: 311">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="expdate">Expiration Month:</label>
+                                                <input type="text" class="form-control" id="expdate" placeholder="MM">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="expyear">Expiration Year:</label>
+                                                <input type="text" class="form-control" id="expyear" placeholder="YYYY">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-block btn-dark">Pay Now</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Payment Modal End -->
+        <div class="container-fluid">
+            <!-- Navigation bar -->
+            <div class="row">
+                <div class="col-12">
+                    <nav class="navbar navbar-expand-lg navbar-dark cstm-header">
+                        <a class="navbar-brand" href="index.html"><img src="./img/logo.png" width="200px"
+                                class="img-fluid" alt="logo"></a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link mx-2" href="index.html">Home <span
+                                            class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item  active">
+                                    <a class="nav-link mx-2" href="cart.html">Order</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link mx-2" href="dashboard.html">Dashboard</a>
+                                </li>
+                            </ul>
+
+                            <button class="btn btn-outline-light mx-2" data-toggle="modal" data-target="#logout"><i
+                                    class="fa fa-sign-out" aria-hidden="true"></i>Logout</button>
+                            <button class="btn btn-light my-2 my-sm-0" type="submit"><i class="fa fa-shopping-cart"></i>
+                                Cart <span id="numberOfProduct"> 2</span></button>
+
+
+                        </div>
+                    </nav>
+                </div>
+            </div> <!-- Navigation bar end -->
+        </div>
+    </header>
+
+    <section class="my-cart p-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="font-weight-bold text-light">My Order</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Cart body -->
+    <section class="cart-body">
+        <div class="container">
+            <div class="row mt-5 mb-5 gx-3">
+                <!-- Product Section -->
+                <div class="col-md-12 col-lg-8 mx-auto mb-5 mb-lg-0">
+                    <h4>Total item (2)</h4>
+                    <!-- Fisrt Product -->
+                    <div class="card p-3">
+                        <div class="row">
+                            <!-- image section -->
+                            <div
+                                class="col-md-5 col-12 mx-auto d-flex justify-content-center align-items-center shadow-lg bg-light product-image">
+                                <img src="img/product/product-19.jpg" alt="cart-image" class="img-fluid">
+                            </div>
+
+                            <!-- Cart details -->
+                            <div class="col-md-7 col-12 mx-auto mt-3">
+                                <div class="row">
+                                    <!-- product details -->
+                                    <div class="col-6 cart-title">
+                                        <h3 class="mb-3 product-name">Zara Shirt</h3>
+                                        <p class="mb-2">Shirt- Blue</p>
+                                        <p class="mb-2">Color- Blue</p>
+                                        <p class="mb-3">Size- M</p>
+                                    </div>
+
+                                    <!-- Product Count -->
+                                    <div class="col-6">
+                                        <ul class="pagination justify-content-end quantity-set">
+                                            <li class="page-item">
+                                                <button class="page-link" id="decrease"><i class="fa fa-minus"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </li>
+                                            <li class="page-item"><input type="text" name="quantity" class="page-link"
+                                                    value="0" id="quantity"></li>
+                                            <li class="page-item">
+                                                <button class="page-link" id="increase"><i class="fa fa-plus"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Remover move and price -->
+                                <div class="row">
+                                    <div class="col-9 d-flex justify-content-between remove-wish">
+                                        <p><i class="fa fa-trash"></i> Remove Item</p>
+                                        <!-- <p><i class="fa fa-heart"></i> Move to wishlist</p> -->
+                                    </div>
+                                    <div class="col-3 d-flex justify-content-end price-money">
+                                        <h6>$ <span id="itemval">0.00</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Second Product -->
+                    <div class="card p-3">
+                        <div class="row">
+                            <!-- image section -->
+                            <div
+                                class="col-12 col-md-5 mx-auto d-flex justify-content-center align-items-center shadow-lg bg-light product-image">
+                                <img src="img/product/product-20.jpg" alt="cart-image" class="img-fluid">
+                            </div>
+
+                            <!-- Cart details -->
+                            <div class="col-md-7 col-12 mx-auto px-3 mt-3">
+                                <div class="row">
+                                    <!-- product details -->
+                                    <div class="col-6 cart-title">
+                                        <h3 class="mb-3 product-name">Zara Shirt</h3>
+                                        <p class="mb-2">Shirt- Blue</p>
+                                        <p class="mb-2">Color- Blue</p>
+                                        <p class="mb-3">Size- M</p>
+                                    </div>
+
+                                    <!-- Product Count -->
+                                    <div class="col-6">
+                                        <ul class="pagination justify-content-end quantity-set">
+                                            <li class="page-item">
+                                                <button class="page-link" id="decrease"><i class="fa fa-minus"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </li>
+                                            <li class="page-item"><input type="text" name="quantity" class="page-link"
+                                                    value="0" id="quantity"></li>
+                                            <li class="page-item">
+                                                <button class="page-link" id="increase"><i class="fa fa-plus"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Remover move and price -->
+                                <div class="row">
+                                    <div class="col-9 d-flex justify-content-between remove-wish">
+                                        <p><i class="fa fa-trash"></i> Remove Item</p>
+                                        <!-- <p><i class="fa fa-heart"></i> Move to wishlist</p> -->
+                                    </div>
+                                    <div class="col-3 d-flex justify-content-end price-money">
+                                        <h6>$ <span id="itemval">0.00</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculation section -->
+                <div class="col-md-12 col-lg-4 mx-auto mt-lg-0 mt-md-5">
+                    <div class="right-side p-3 shadow bg-white">
+                        <h4 class="product-name mb-5">The total amount of</h4>
+                        <div class="price-individual d-flex justify-content-between">
+                            <p>Product amount</p>
+                            <p>$ <span>0.00</span></p>
+                        </div>
+                        <div class="price-individual d-flex justify-content-between">
+                            <p>Shipping Charge</p>
+                            <p>$ 0.00</p>
+                        </div>
+                        <hr>
+                        <div class="total-amount d-flex justify-content-between font-weight-bold">
+                            <p>The Total Amount is</p>
+                            <p>$ <span id="total-cart-amount">0.00</span></p>
+                        </div>
+                        <button class="btn btn-dark text-uppercase" data-toggle="modal" data-target="#payment">
+                            Checkout</button>
+                    </div>
+
+                    <!-- Discount -->
+                    <!-- 
+                    <div class="discount-code shadow mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <a class="d-flex justify-content-between text-dark" data-toggle="collapse"
+                                    href="#collapsexmp" aria-expanded="false" aria-controls="collapsexmp">Add a discount
+                                    cupone
+                                    <span><i class="fa fa-chevron-circle-down pt-1"></i></span>
+                                </a>
+                                <div id="collapsexmp" class="collapse">
+                                    <div class="mt-3">
+                                        <input type="text" name="" id="discount-code"
+                                            class="form-control font-weight-bold" placeholder="Enter the discount code">
+                                        <small id="error-throw" class="text-danger mt-3"> Code is Mohit</small>
+                                    </div>
+                                    <button class="btn btn-outline-info btn-sm mt-3">Apply Code</button>
+                                </div>
+                            </div>
+                        </div> -->
+                    <!-- Expected delivery 
+                    <div class="mt-3 shadow bg-white p-3">
+                        <div class="pt-4">
+                            <h5>Expected Delivery Date</h5>
+                            <p class="mb-4">November 5th 2020 - November 10th 2020</p>
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </div>
+        </div>
+        </div>
+
+    </section>
+
+
+
+
+
+   <!-- Footer Section -->
+   <footer class=" cstm-header pt-5">
+    <div class="container text-light">
+        <div class="row text-center">
+            <div class="col-12 col-md-4">
+                <h3 class="pb-3">About Us</h3>
+                <p>This is an Online Shop as database course project<br/>powered by : Ayda - Mina - Zahra</p>
+            </div>
+            <div class="col-12 col-md-4">
+                <h3 class="pb-3">Contact Us</h3>
+                <p><i class="fa fa-envelope" aria-hidden="true"></i> testemail@gmail.com</p>
+                <p><i class="fa fa-phone-square" aria-hidden="true"></i> +98 123456789</p>
+            </div>
+            <div class="col-12 col-md-4">
+                <h3 class="pb-3">Follow Us</h3>
+                <div class="social-icon">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light"><i class="fa fa-facebook" aria-hidden="true"></i>
+                                Facebook</a></li>
+                        <li><a href="#" class="text-light"><i class="fa fa-twitter" aria-hidden="true"></i>
+                                Twitter</a></li>
+                        <li><a href="#" class="text-light"><i class="fa fa-instagram" aria-hidden="true"></i>
+                                Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Bootstrap js -->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/popper.js"></script>
+    <!-- OWL Car -->
+    <script src="js/owl.carousel.min.js"></script>
+    <!-- Show More js -->
+    <script src="js/showMoreItems.min.js"></script>
+
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- Theme js -->
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>
