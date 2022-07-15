@@ -6,11 +6,13 @@ import (
 	"db_p/profile"
 	"db_p/signUP_IN"
 	"db_p/structs"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/go-sql-driver/mysql"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func checkErr(c *gin.Context, err error, x gin.H) {
@@ -56,8 +58,8 @@ func getID(c *gin.Context) int {
 	return userId
 }
 func CreatUser(c *gin.Context) {
-	Email := c.Query("email")
-	Password := c.Query("password")
+	Email := c.Param("email")
+	Password := c.Param("password")
 	userId, err := signUP_IN.SignUp(Email, Password, setupDB())
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
@@ -99,10 +101,30 @@ func ModifyEmail(c *gin.Context) {
 	checkErr(c, err, gin.H{"data": Id, "message": "you changed your Email!"})
 }
 func ModifyPassword(c *gin.Context) {
-	Id := getID(c)
-	newPassword := c.Query("password")
-	err := profile.Modify_password(Id, newPassword, setupDB())
-	checkErr(c, err, gin.H{"data": Id, "message": "you changed your password!"})
+	decoder := json.NewDecoder(c.Request.Body)
+	var user structs.User_info
+	err := decoder.Decode(&user)
+	if err != nil {
+		c.String(http.StatusBadRequest, "request body has wrong format: %s\n", err)
+
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	user.User_id = getID(c)
+	newPassword := c.Query("password") ///////////////////////////////
+	err = profile.Modify_password(user.User_id, newPassword, setupDB())
+	checkErr(c, err, gin.H{"userId": user.User_id, "message": "you changed your password!"})
+
+	if err != nil {
+		c.String(http.StatusInternalServerError, err.Error())
+
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.String(http.StatusOK, "password successfully updated")
+
 }
 func ModifyAdd2(c *gin.Context) {
 	Id := getID(c)
@@ -158,7 +180,8 @@ func GetAllProductsByCategory(c *gin.Context) {
 	checkErr(c, err, gin.H{"categories": allCat, "message": "All categories"})
 
 	var cat structs.Categories
-	for cat = range allCat {
+	for i := range allCat {
+		cat = allCat[i]
 		id := cat.Cat_id
 		db := setupDB()
 		products, err := pickbuy.GetProductsByCat(id, db)
@@ -173,8 +196,8 @@ func AllProducts(c *gin.Context) {
 }
 func GetAllOrders(c *gin.Context) {
 	id := getID(c)
-	orders, err := pickbuy.GetAllOrders(setupDB(), id)
-	checkErr(c, err, gin.H{"orders": orders, "userId": id, "message": "All orders"})
+	orders, sum, err := pickbuy.GetAllOrders(setupDB(), id)
+	checkErr(c, err, gin.H{"orders": orders, "userId": id, "total_sum": sum, "message": "All orders"})
 }
 func GetRecommend(c *gin.Context) {
 	productId := c.Param("productId")
@@ -191,4 +214,61 @@ func GetRecommend(c *gin.Context) {
 	products, err := pickbuy.RecommendProducts(db, p)
 
 	checkErr(c, err, gin.H{"products": products, "userId": id, "message": "we recommend you these products"})
+}
+func DeleteOrder(c *gin.Context) {
+	orderId := c.Param("orderId")
+	db := setupDB()
+	_, err := db.Query(`DELETE FROM orders WHERE order_id=?`, orderId)
+	checkErr(c, err, gin.H{"orderId": orderId, "message": "order deleted"})
+
+}
+func AddOrder(c *gin.Context) {
+	decoder := json.NewDecoder(c.Request.Body)
+	var order structs.Product
+	var amount int
+	var userId int
+	err := decoder.Decode(&order)
+	if err != nil {
+		c.String(http.StatusBadRequest, "request body has wrong format: %s\n", err)
+
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	err = decoder.Decode(&amount)
+	checkErr(c, err, gin.H{})
+
+	err = decoder.Decode(&userId)
+	checkErr(c, err, gin.H{})
+
+	err = pickbuy.AddOrder(amount, order, setupDB(), userId)
+	if err != nil {
+		if strings.HasPrefix(err.Error(), "not enough quantity") {
+			c.String(http.StatusBadRequest, err.Error())
+
+			c.AbortWithError(http.StatusBadRequest, err)
+			return
+		}
+
+		c.String(http.StatusInternalServerError, err.Error())
+
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.String(http.StatusOK, "Successful purchase")
+
+}
+func BuyOrders(c *gin.Context) {
+	id := getID(c)
+
+	cvv, err := strconv.Atoi(c.Param("cvv"))
+	checkErr(c, err, gin.H{})
+
+	cardNum, err := strconv.Atoi(c.Param("cardNumber"))
+	checkErr(c, err, gin.H{})
+
+	address := c.Param("address")
+
+	err = pickbuy.Buy(setupDB(), cardNum, cvv, address, id)
+	checkErr(c, err, gin.H{"userId": id, "cvv": cvv, "card num": cardNum, "address": address, "message": "orders bought"})
 }

@@ -63,8 +63,9 @@ func GetProductsByCat(category int, db *sql.DB) ([]structs.Product, error) {
 	return products, err
 
 }
-func GetAllOrders(db *sql.DB, id int) ([]structs.Order_products, error) {
+func GetAllOrders(db *sql.DB, id int) ([]structs.Order_products, int, error) {
 	rows, err := db.Query("SELECT * FROM orders WHERE user_id=?", id)
+	sum := 0
 	if err != nil {
 		panic(err)
 	}
@@ -74,11 +75,12 @@ func GetAllOrders(db *sql.DB, id int) ([]structs.Order_products, error) {
 		err = rows.Scan(&order.Order_id, &order.User_id, &order.Product_id, &order.Amt, &order.Qty, &order.Status)
 		if err != nil {
 			//			panic(err)
-			return orders, err
+			return orders, sum, err
 		}
 		orders = append(orders, order)
+		sum += order.Amt
 	}
-	return orders, err
+	return orders, sum, err
 }
 func GetAllProducts(db *sql.DB) ([]structs.Product, error) {
 	var products []structs.Product
@@ -278,11 +280,14 @@ func Order(db *sql.DB, id int) {
 	products, _ := Pick(db, id)
 	//showOrders(products, sumAmount)
 	var p Pair
-	for p = range products {
+	i := 0
+	for i < len(products) {
+		p = products[i]
 		err := AddOrder(p.amount, p.product, db, id)
 		if err != nil {
 			panic(err)
 		}
+		i += 1
 	}
 }
 func chooseAddress(db *sql.DB, id int) string {
@@ -354,7 +359,7 @@ func updateLog(db *sql.DB, id int, orderID int, totoalAmount int, cardNum int, c
 	}
 
 }
-func Buy(db *sql.DB, id int) {
+func Buy(db *sql.DB, cardNum int, cvv int, address string, id int) error {
 	var count int
 	var orderTotalCost int
 	var orderID int
@@ -383,31 +388,36 @@ func Buy(db *sql.DB, id int) {
 	//show products
 	println("\nall your orders:")
 	ShowOrders(products, sum)
-	var ans int
-	println("\nAre you sure you want to buy?\n0)NO\n1)YES\n")
-	fmt.Scanf("%d", &ans)
-	if ans == 1 {
-		//log
-		var cardNum int
-		var cvv int
+	//var ans int
+	//	println("\nAre you sure you want to buy?\n0)NO\n1)YES\n")
+	//fmt.Scanf("%d", &ans)
+	//if ans == 1 {
+	//log
+	//	var cardNum int
+	//	var cvv int
 
-		println("enter your card number:")
-		fmt.Scanf("%d", &cardNum)
+	//	println("enter your card number:")
+	//	fmt.Scanf("%d", &cardNum)
 
-		println("enter your cvv:")
-		fmt.Scanf("%d", &cvv)
+	//	println("enter your cvv:")
+	//	fmt.Scanf("%d", &cvv)
 
-		address := chooseAddress(db, id)
+	//	address := chooseAddress(db, id)
 
-		i := 0
-		for i < len(arrOrderIDs) {
-			//i is order id
-			updateLog(db, id, arrOrderIDs[i], sum, cardNum, cvv, address)
-			i += 1
+	i := 0
+	for i < len(arrOrderIDs) {
+		//i is order id
+		updateLog(db, id, arrOrderIDs[i], sum, cardNum, cvv, address)
+		_, err = db.Query("DELETE FROM orders WHERE order_id=?", arrOrderIDs[i])
+		if err != nil {
+			panic(err)
 		}
+		i += 1
 	}
-	ShowLogs(id, db)
+	//}
+	//	ShowLogs(id, db)
 	//	GetLogs(db, id)
+	return err
 }
 func GetLogs(db *sql.DB, id int) ([]structs.Logs, error) {
 	var logs []structs.Logs
