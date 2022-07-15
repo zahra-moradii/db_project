@@ -8,13 +8,13 @@ import (
 	"time"
 )
 
-func GetAllCategories(db *sql.DB) []structs.Categories {
+func GetAllCategories(db *sql.DB) ([]structs.Categories, error) {
 	var categories []structs.Categories
 	var category structs.Categories
 
 	result, err := db.Query("SELECT distinct cat_id, cat_title FROM categories ")
 	if err != nil {
-		panic(err)
+		return categories, err
 	}
 	for result.Next() {
 		err = result.Scan(&category.Cat_id, &category.Cat_title)
@@ -23,7 +23,7 @@ func GetAllCategories(db *sql.DB) []structs.Categories {
 			panic(err)
 		}
 	}
-	return categories
+	return categories, err
 }
 func showAndChooseCategory(allCategories []structs.Categories) structs.Categories {
 	println("Choose a category:")
@@ -40,7 +40,7 @@ func showAndChooseCategory(allCategories []structs.Categories) structs.Categorie
 	//	fmt.Printf("\n%d\n", dictCategories[j].Cat_id)
 	return dictCategories[j-1]
 }
-func GetProductsByCat(category int, db *sql.DB) []structs.Product {
+func GetProductsByCat(category int, db *sql.DB) ([]structs.Product, error) {
 	var products []structs.Product
 
 	rows, err := db.Query("SELECT * FROM products WHERE product_cat=?", category)
@@ -55,11 +55,12 @@ func GetProductsByCat(category int, db *sql.DB) []structs.Product {
 			&p.Product_price, &p.Product_desc, &p.Product_image, &p.Product_keywords, &p.Product_count)
 
 		if err != nil {
-			panic(err)
+
+			return products, err
 		}
 		products = append(products, p)
 	}
-	return products
+	return products, err
 
 }
 func showAndChooseProduct(products []structs.Product) structs.Product {
@@ -194,10 +195,10 @@ func Pick(db *sql.DB, id int) ([]Pair, int) {
 	//show categories
 	var sumPrices = 0
 	var chosenProducts []Pair
-	allCategories := GetAllCategories(db)
+	allCategories, _ := GetAllCategories(db)
 	category := showAndChooseCategory(allCategories)
 	fmt.Printf("%d", category.Cat_id)
-	products := GetProductsByCat(category.Cat_id, db)
+	products, _ := GetProductsByCat(category.Cat_id, db)
 	var exit string
 	for true {
 		product := showAndChooseProduct(products)
@@ -359,7 +360,7 @@ func Buy(db *sql.DB, id int) {
 	ShowLogs(id, db)
 	//	GetLogs(db, id)
 }
-func GetLogs(db *sql.DB, id int) []structs.Logs {
+func GetLogs(db *sql.DB, id int) ([]structs.Logs, error) {
 	var logs []structs.Logs
 	result, err := db.Query(`SELECT * FROM logs WHERE user_id=?`, id)
 	if err != nil {
@@ -370,14 +371,14 @@ func GetLogs(db *sql.DB, id int) []structs.Logs {
 		err = result.Scan(&log.Id, &log.Order_id, &log.User_id, &log.Action, &log.Address,
 			&log.Total_amt, &log.Cardnumber, &log.Cvv, &log.Date)
 		if err != nil {
-			panic(err)
+			return logs, err
 		}
 		logs = append(logs, log)
 	}
-	return logs
+	return logs, err
 }
 func ShowLogs(id int, db *sql.DB) {
-	logs := GetLogs(db, id)
+	logs, _ := GetLogs(db, id)
 	i := 0
 	for i < len(logs) {
 		log := logs[i]

@@ -12,7 +12,7 @@ func main() {
 
 	r := gin.Default()
 	r.POST("/signUp", API.CreatUser)
-	r.POST("/signIn", API.SignInUser)
+	r.GET("/signIn", API.SignInUser)
 
 	r.GET("/profile/{id}/newProduct", API.Logs)
 	r.GET("/profile/{id}/newProduct", API.News)
@@ -26,7 +26,7 @@ func main() {
 
 	r.GET("/allCategories", API.AllCategories)
 	r.GET("allCategories/:catId", API.ProductsByCategory)
-	r.GET("/products", API.AllProducts)
+	//	r.GET("/products", API.AllProducts)
 	r.GET("/products/:productId", API.GetAllProductsByCategory)
 	/*
 		r.GET("/order", handler.GetAllOrdersHandler)

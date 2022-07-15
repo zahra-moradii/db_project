@@ -2,8 +2,10 @@ package API
 
 import (
 	"database/sql"
+	"db_p/pickbuy"
 	"db_p/profile"
 	"db_p/signUP_IN"
+	"db_p/structs"
 	"github.com/gin-gonic/gin"
 	"github.com/go-sql-driver/mysql"
 	"log"
@@ -11,9 +13,13 @@ import (
 	"strconv"
 )
 
-func checkErr(err error) {
+func checkErr(c *gin.Context, err error, x gin.H) {
 	if err != nil {
-		panic(err)
+		c.String(http.StatusInternalServerError, err.Error())
+
+		c.AbortWithError(http.StatusInternalServerError, err)
+	} else {
+		c.JSON(http.StatusOK, x)
 	}
 }
 func setupDB() *sql.DB {
@@ -46,11 +52,7 @@ type user struct {
 func getID(c *gin.Context) int {
 	Id := c.Param("id")
 	userId, err := strconv.Atoi(Id)
-	if err != nil {
-		c.String(http.StatusInternalServerError, err.Error())
-
-		c.AbortWithError(http.StatusInternalServerError, err)
-	}
+	checkErr(c, err, gin.H{"data": userId})
 	return userId
 }
 func CreatUser(c *gin.Context) {
@@ -63,11 +65,11 @@ func CreatUser(c *gin.Context) {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": userId, "message": "you signed up successfully!"})
+	c.JSON(http.StatusOK, gin.H{"data": userId, "email": Email, "password": Password, "message": "you signed up successfully!"})
 }
 func SignInUser(c *gin.Context) {
-	Email := c.Query("email")
-	Password := c.Query("password")
+	Email := c.Param("email")
+	Password := c.Param("password")
 	userId, err := signUP_IN.SignIn(Email, Password, setupDB())
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
@@ -81,61 +83,89 @@ func SignInUser(c *gin.Context) {
 func News(c *gin.Context) {
 	Id := getID(c)
 	NewProducts := profile.ShowNews(setupDB(), Id)
-	c.JSON(http.StatusOK, gin.H{"data": NewProducts, "message": "you signed up successfully!"})
-}
-
-func Logs(c *gin.Context) {
-
+	c.JSON(http.StatusOK, gin.H{"data": NewProducts, "message": "products that were unavailable for you are available now !"})
 }
 func ModifyMobile(c *gin.Context) {
 	userId := getID(c)
 	temp := c.Query("mobile")
-	profile.Modify_mobile(userId, temp, setupDB())
+	err := profile.Modify_mobile(userId, temp, setupDB())
+	checkErr(c, err, gin.H{"data": userId, "message": "you changed your phone number!"})
+
 }
 func ModifyEmail(c *gin.Context) {
 	Id := getID(c)
 	newEmail := c.Query("email")
-	profile.Modify_email(Id, newEmail, setupDB())
+	err := profile.Modify_email(Id, newEmail, setupDB())
+	checkErr(c, err, gin.H{"data": Id, "message": "you changed your Email!"})
 }
 func ModifyPassword(c *gin.Context) {
 	Id := getID(c)
 	newPassword := c.Query("password")
-	profile.Modify_password(Id, newPassword, setupDB())
+	err := profile.Modify_password(Id, newPassword, setupDB())
+	checkErr(c, err, gin.H{"data": Id, "message": "you changed your password!"})
 }
 
 func ModifyAdd2(c *gin.Context) {
 	Id := getID(c)
 	add2 := c.Query("address2")
-	profile.Modify_address2(Id, add2, setupDB())
+	err := profile.Modify_address2(Id, add2, setupDB())
+	checkErr(c, err, gin.H{"data": Id, "message": "you changed your address2!"})
 }
 func ModifyAdd1(c *gin.Context) {
 	Id := getID(c)
 	add1 := c.Query("address1")
-	profile.Modify_address1(Id, add1, setupDB())
+	err := profile.Modify_address1(Id, add1, setupDB())
+	checkErr(c, err, gin.H{"data": Id, "message": "you changed your address1!"})
 
 }
 func ModifyLastName(c *gin.Context) {
 	Id := getID(c)
 	lName := c.Query("lastName")
-	profile.Modify_lastname(Id, lName, setupDB())
-
+	err := profile.Modify_lastname(Id, lName, setupDB())
+	checkErr(c, err, gin.H{"data": Id, "message": "you changed your last name!"})
 }
 func ModifyFirstName(c *gin.Context) {
 	userId := getID(c)
 	temp := c.Query("name")
-	profile.Modify_firstname(userId, temp, setupDB())
-
+	err := profile.Modify_firstname(userId, temp, setupDB())
+	checkErr(c, err, gin.H{"data": userId, "message": "you changed your first name!"})
 }
 func ProductsByCategory(c *gin.Context) {
+	catId := c.Param("catId")
 
+	id, err := strconv.Atoi(catId)
+	checkErr(c, err, gin.H{"data": id})
+	db := setupDB()
+	products, err := pickbuy.GetProductsByCat(id, db)
+	checkErr(c, err, gin.H{"products": products, "category": catId, "message": "all products by category"})
 }
+func Logs(c *gin.Context) {
+	Id := getID(c)
+	var logs []structs.Logs
+	logs, err := pickbuy.GetLogs(setupDB(), Id)
+
+	checkErr(c, err, gin.H{"logs": logs, "userId": Id, "message": "your log history!"})
+}
+
 func AllCategories(c *gin.Context) {
+	db := setupDB()
+	allCat, err := pickbuy.GetAllCategories(db)
+	checkErr(c, err, gin.H{"categories": allCat, "message": "All categories"})
 
 }
 
-func AllProducts(c *gin.Context) {
-
-}
 func GetAllProductsByCategory(c *gin.Context) {
+	db := setupDB()
+	allCat, err := pickbuy.GetAllCategories(db)
+	checkErr(c, err, gin.H{"categories": allCat, "message": "All categories"})
+
+	var cat structs.Categories
+	for cat = range allCat {
+		id := cat.Cat_id
+		db := setupDB()
+		products, err := pickbuy.GetProductsByCat(id, db)
+		checkErr(c, err, gin.H{"products": products, "category": id, "message": "all products by all category"})
+
+	}
 
 }
